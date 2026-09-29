@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bellewoodpharmacy.com"),
+  metadataBase: new URL("https://bellewood-pharmacy.vercel.app"),
   title: {
     default: "Bellewood Pharmacy | Leesburg, VA",
     template: "%s | Bellewood Pharmacy",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
       "Personalized prescription services, vaccines, wellness support, transfers, and local pharmacy care in Leesburg, Virginia.",
     type: "website",
     locale: "en_US",
-    url: "https://bellewoodpharmacy.com",
+    url: "https://bellewood-pharmacy.vercel.app",
     siteName: "Bellewood Pharmacy",
     images: [
       {
