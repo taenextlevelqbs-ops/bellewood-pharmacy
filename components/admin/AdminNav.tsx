@@ -5,8 +5,14 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/admin", label: "Overview" },
   { href: "/admin#medications", label: "Medications" },
+  { href: "/admin/catalog", label: "Drug Catalog" },
+  { href: "/admin/requests", label: "Requests" },
   { href: "/admin/activity", label: "Search Activity" },
-  { href: "/availability", label: "Public Availability", external: true },
+  {
+    href: "/availability",
+    label: "Public Availability",
+    external: true,
+  },
 ];
 
 export default function AdminNav() {
@@ -18,6 +24,8 @@ export default function AdminNav() {
         {links.map((link) => {
           const active =
             link.href === "/admin"
+              ? pathname === "/admin"
+              : link.href.startsWith("/admin#")
               ? pathname === "/admin"
               : pathname === link.href;
 

@@ -1,22 +1,63 @@
-export default function VaccinesPage() {
-  const vaccines = [
-    {
-      title: "Flu Vaccine",
-      text: "Ask Bellewood about seasonal flu vaccination availability.",
-    },
-    {
-      title: "COVID-19 Vaccine",
-      text: "Contact the pharmacy for current COVID-19 vaccine options.",
-    },
-    {
-      title: "Shingles Vaccine",
-      text: "Ask the pharmacy team about shingles vaccination availability.",
-    },
-    {
-      title: "Tdap Vaccine",
-      text: "Contact Bellewood for Tdap vaccine scheduling information.",
-    },
-  ];
+"use client";
+
+import { FormEvent, useState } from "react";
+
+export default function PrescriptionsPage() {
+  const [form, setForm] = useState({
+    patientName: "",
+    phone: "",
+    rxNumber: "",
+    medicationName: "",
+    notes: "",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  function update(field: string, value: string) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setSuccess("");
+    setError("");
+
+    try {
+      const response = await fetch("/api/requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestType: "prescription",
+          ...form,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "Unable to submit request.");
+      }
+
+      setSuccess(data.reference);
+
+      setForm({
+        patientName: "",
+        phone: "",
+        rxNumber: "",
+        medicationName: "",
+        notes: "",
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to submit request."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
@@ -48,100 +89,117 @@ export default function VaccinesPage() {
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              Vaccinations
+              Prescriptions
             </p>
 
             <h2 className="mt-4 text-5xl font-black tracking-tight">
-              Protect your health
+              Pharmacy support
               <span className="block text-[#ed1c2e]">
-                close to home.
+                when you need it.
               </span>
             </h2>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Ask Bellewood Pharmacy about available vaccinations and scheduling
-              options in Leesburg.
+              Send Bellewood Pharmacy a prescription request and our team can
+              review it and follow up with you.
             </p>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {vaccines.map((vaccine) => (
+            <div className="mt-10 grid gap-4">
+              {[
+                "Prescription questions",
+                "Refill requests",
+                "Medication assistance",
+                "Pharmacy follow-up",
+              ].map((item) => (
                 <div
-                  key={vaccine.title}
-                  className="rounded-[24px] bg-white p-6 shadow-sm"
+                  key={item}
+                  className="rounded-[22px] bg-white p-5 font-black shadow-sm"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ed1c2e] font-black text-white">
-                    +
-                  </div>
-
-                  <h3 className="mt-5 text-xl font-black">
-                    {vaccine.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-gray-500">
-                    {vaccine.text}
-                  </p>
+                  {item}
                 </div>
               ))}
             </div>
+
+            <a
+              href="/availability"
+              className="mt-6 inline-block rounded-full border border-black/10 bg-white px-6 py-3 font-bold"
+            >
+              Check Medication Availability
+            </a>
           </div>
 
           <div className="rounded-[34px] bg-white p-8 shadow-xl">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              Schedule a Vaccine
+              Prescription Request
             </p>
 
             <h3 className="mt-3 text-3xl font-black">
-              Request an appointment.
+              Contact the pharmacy team.
             </h3>
 
-            <div className="mt-7 grid gap-4">
+            <form onSubmit={submit} className="mt-7 grid gap-4">
               <input
-                type="text"
+                required
+                value={form.patientName}
+                onChange={(e) => update("patientName", e.target.value)}
                 placeholder="First and last name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <input
+                required
                 type="tel"
+                value={form.phone}
+                onChange={(e) => update("phone", e.target.value)}
                 placeholder="Phone number"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
-              <select
+              <input
+                value={form.rxNumber}
+                onChange={(e) => update("rxNumber", e.target.value)}
+                placeholder="Prescription number, if available"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select vaccine
-                </option>
-                <option>Flu Vaccine</option>
-                <option>COVID-19 Vaccine</option>
-                <option>Shingles Vaccine</option>
-                <option>Tdap Vaccine</option>
-              </select>
+              />
 
               <input
-                type="date"
+                value={form.medicationName}
+                onChange={(e) => update("medicationName", e.target.value)}
+                placeholder="Medication name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <textarea
-                placeholder="Additional notes"
-                rows={4}
+                required
+                value={form.notes}
+                onChange={(e) => update("notes", e.target.value)}
+                placeholder="How can the pharmacy help?"
+                rows={5}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <button
-                type="button"
-                className="rounded-full bg-[#ed1c2e] px-6 py-4 font-bold text-white"
+                disabled={submitting}
+                className="rounded-full bg-[#ed1c2e] px-6 py-4 font-bold text-white disabled:opacity-50"
               >
-                Request Appointment
+                {submitting ? "Submitting..." : "Submit Prescription Request"}
               </button>
 
-              <p className="text-center text-xs text-gray-400">
-                Demo scheduling experience
-              </p>
-            </div>
+              {success && (
+                <div className="rounded-2xl bg-green-50 p-4 text-sm text-green-800">
+                  <p className="font-black">Request received.</p>
+                  <p className="mt-1">
+                    Reference: <strong>{success}</strong>
+                  </p>
+                </div>
+              )}
+
+              {error && (
+                <div className="rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">
+                  {error}
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </section>

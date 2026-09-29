@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import AdminNav from "@/components/admin/AdminNav";
+import { createClient } from "@/lib/supabase/client";
 
 type RequestType =
   | "prescription"
@@ -9,22 +11,27 @@ type RequestType =
   | "vaccine"
   | "appointment";
 
-type RequestStatus =
-  | "new"
-  | "in_progress"
-  | "completed";
-
+type RequestStatus = "new" | "in_progress" | "completed";
 type Priority = "normal" | "priority";
 
 type PharmacyRequest = {
   id: string;
-  type: RequestType;
+  request_type: RequestType;
   status: RequestStatus;
   priority: Priority;
   reference: string;
-  note: string;
-  createdAt: string;
-  updatedAt: string;
+  patient_name: string | null;
+  phone: string | null;
+  email: string | null;
+  medication_name: string | null;
+  current_pharmacy: string | null;
+  current_pharmacy_phone: string | null;
+  vaccine_name: string | null;
+  requested_date: string | null;
+  rx_number: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 const typeLabels: Record<RequestType, string> = {
@@ -40,114 +47,130 @@ const statusLabels: Record<RequestStatus, string> = {
   completed: "Completed",
 };
 
-function makeReference(type: RequestType) {
-  const prefixes: Record<RequestType, string> = {
-    prescription: "RX",
-    transfer: "TR",
-    vaccine: "VX",
-    appointment: "AP",
-  };
-
-  return `${prefixes[type]}-${Date.now()
-    .toString()
-    .slice(-6)}`;
-}
-
 export default function RequestsPage() {
+  const router = useRouter();
+  const supabase = useMemo(() => createClient(), []);
+
   const [requests, setRequests] = useState<PharmacyRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] =
     useState<RequestType | "all">("all");
   const [statusFilter, setStatusFilter] =
     useState<RequestStatus | "all">("all");
-  const [search, setSearch] = useState("");
 
-  const [newType, setNewType] =
-    useState<RequestType>("prescription");
-  const [newPriority, setNewPriority] =
-    useState<Priority>("normal");
-  const [newNote, setNewNote] = useState("");
+  async function loadRequests() {
+    setLoading(true);
+    setMessage("");
 
-  const stats = useMemo(() => {
-    return {
-      total: requests.length,
-      new: requests.filter((r) => r.status === "new").length,
-      progress: requests.filter(
-        (r) => r.status === "in_progress"
-      ).length,
-      completed: requests.filter(
-        (r) => r.status === "completed"
-      ).length,
-    };
-  }, [requests]);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    if (!user) {
+      router.replace("/admin/login");
+      return;
+    }
 
-    return requests.filter((request) => {
-      if (
-        typeFilter !== "all" &&
-        request.type !== typeFilter
-      ) {
-        return false;
-      }
+    const { data, error } = await supabase
+      .from("pharmacy_requests")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-      if (
-        statusFilter !== "all" &&
-        request.status !== statusFilter
-      ) {
-        return false;
-      }
+    if (error) {
+      console.error(error);
+      setMessage("Could not load requests.");
+    } else {
+      setRequests((data || []) as PharmacyRequest[]);
+    }
 
-      if (
-        q &&
-        !request.reference.toLowerCase().includes(q) &&
-        !request.note.toLowerCase().includes(q) &&
-        !typeLabels[request.type]
-          .toLowerCase()
-          .includes(q)
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [requests, search, typeFilter, statusFilter]);
-
-  function createRequest() {
-    const now = new Date().toISOString();
-
-    const request: PharmacyRequest = {
-      id: crypto.randomUUID(),
-      type: newType,
-      status: "new",
-      priority: newPriority,
-      reference: makeReference(newType),
-      note: newNote.trim(),
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    setRequests((current) => [request, ...current]);
-    setNewNote("");
-    setNewPriority("normal");
+    setLoading(false);
   }
 
-  function changeStatus(
-    id: string,
-    status: RequestStatus
-  ) {
+  useEffect(() => {
+    void loadRequests();
+  }, []);
+
+  async function changeStatus(id: string, status: RequestStatus) {
+    setMessage("");
+
+    const { error } = await supabase
+      .from("pharmacy_requests")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      console.error(error);
+      setMessage("Could not update request.");
+      return;
+    }
+
     setRequests((current) =>
       current.map((request) =>
         request.id === id
           ? {
               ...request,
               status,
-              updatedAt: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
             }
           : request
       )
     );
   }
+
+  async function changePriority(id: string, priority: Priority) {
+    const { error } = await supabase
+      .from("pharmacy_requests")
+      .update({ priority })
+      .eq("id", id);
+
+    if (!error) {
+      setRequests((current) =>
+        current.map((request) =>
+          request.id === id ? { ...request, priority } : request
+        )
+      );
+    }
+  }
+
+  const stats = useMemo(
+    () => ({
+      total: requests.length,
+      new: requests.filter((r) => r.status === "new").length,
+      progress: requests.filter((r) => r.status === "in_progress").length,
+      completed: requests.filter((r) => r.status === "completed").length,
+    }),
+    [requests]
+  );
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+
+    return requests.filter((request) => {
+      if (typeFilter !== "all" && request.request_type !== typeFilter) {
+        return false;
+      }
+
+      if (statusFilter !== "all" && request.status !== statusFilter) {
+        return false;
+      }
+
+      if (!q) return true;
+
+      return [
+        request.reference,
+        request.patient_name,
+        request.phone,
+        request.medication_name,
+        request.vaccine_name,
+        request.current_pharmacy,
+        request.rx_number,
+        request.notes,
+        typeLabels[request.request_type],
+      ].some((value) => value?.toLowerCase().includes(q));
+    });
+  }, [requests, search, typeFilter, statusFilter]);
 
   return (
     <main className="min-h-screen bg-[#d9d9d9] text-[#303030]">
@@ -159,19 +182,19 @@ export default function RequestsPage() {
                 Bellewood Pharmacy
               </p>
 
-              <h1 className="mt-2 text-3xl font-black">
-                Requests
-              </h1>
+              <h1 className="mt-2 text-3xl font-black">Requests</h1>
 
               <p className="mt-2 text-sm text-[#666]">
-                Staff operations queue for incoming pharmacy
-                requests.
+                Staff operations queue for incoming pharmacy requests.
               </p>
             </div>
 
-            <div className="w-fit rounded-full bg-green-50 px-4 py-2 text-xs font-black text-green-700">
-              ● OPERATIONS ACTIVE
-            </div>
+            <button
+              onClick={() => void loadRequests()}
+              className="w-fit rounded-full bg-[#303030] px-5 py-3 text-sm font-black text-white"
+            >
+              Refresh Queue
+            </button>
           </div>
         </div>
       </header>
@@ -182,298 +205,227 @@ export default function RequestsPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Stat label="Total Requests" value={stats.total} />
           <Stat label="New" value={stats.new} />
-          <Stat
-            label="In Progress"
-            value={stats.progress}
-          />
-          <Stat
-            label="Completed"
-            value={stats.completed}
-          />
+          <Stat label="In Progress" value={stats.progress} />
+          <Stat label="Completed" value={stats.completed} />
         </div>
 
-        <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_360px]">
-          <section className="rounded-[30px] bg-white p-6 shadow-sm">
+        <section className="mt-6 rounded-[30px] bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ed1c2e]">
                 Work Queue
               </p>
-
-              <h2 className="mt-2 text-2xl font-black">
-                Incoming Requests
-              </h2>
-
+              <h2 className="mt-2 text-2xl font-black">Incoming Requests</h2>
               <p className="mt-2 text-sm text-[#666]">
-                Review requests and move them through the
-                pharmacy workflow.
+                Review requests and move them through the pharmacy workflow.
               </p>
             </div>
 
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              <input
-                value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-                placeholder="Search queue..."
-                className="rounded-2xl border border-black/15 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
-
-              <select
-                value={typeFilter}
-                onChange={(e) =>
-                  setTypeFilter(
-                    e.target.value as
-                      | RequestType
-                      | "all"
-                  )
-                }
-                className="rounded-2xl border border-black/15 bg-white px-4 py-3 font-bold"
-              >
-                <option value="all">
-                  All Request Types
-                </option>
-                <option value="prescription">
-                  Prescriptions
-                </option>
-                <option value="transfer">
-                  Transfers
-                </option>
-                <option value="vaccine">
-                  Vaccines
-                </option>
-                <option value="appointment">
-                  Appointments
-                </option>
-              </select>
-
-              <select
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(
-                    e.target.value as
-                      | RequestStatus
-                      | "all"
-                  )
-                }
-                className="rounded-2xl border border-black/15 bg-white px-4 py-3 font-bold"
-              >
-                <option value="all">
-                  All Statuses
-                </option>
-                <option value="new">New</option>
-                <option value="in_progress">
-                  In Progress
-                </option>
-                <option value="completed">
-                  Completed
-                </option>
-              </select>
+            <div className="rounded-full bg-green-50 px-4 py-2 text-xs font-black text-green-700">
+              ● OPERATIONS ACTIVE
             </div>
+          </div>
 
-            <div className="mt-6 space-y-3">
-              {filtered.length === 0 ? (
-                <div className="rounded-[24px] border border-dashed border-black/20 px-6 py-14 text-center">
-                  <p className="text-lg font-black">
-                    No requests in the queue
-                  </p>
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search name, reference, medication..."
+              className="rounded-2xl border border-black/15 px-4 py-3 outline-none focus:border-[#ed1c2e]"
+            />
 
-                  <p className="mt-2 text-sm text-[#666]">
-                    New pharmacy requests will appear here
-                    once connected to the patient forms.
-                  </p>
-                </div>
-              ) : (
-                filtered.map((request) => (
-                  <article
-                    key={request.id}
-                    className="rounded-[24px] border border-black/10 p-5"
-                  >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="rounded-full bg-[#303030] px-3 py-1 text-xs font-black text-white">
-                            {typeLabels[request.type]}
+            <select
+              value={typeFilter}
+              onChange={(e) =>
+                setTypeFilter(e.target.value as RequestType | "all")
+              }
+              className="rounded-2xl border border-black/15 bg-white px-4 py-3 font-bold"
+            >
+              <option value="all">All Request Types</option>
+              <option value="prescription">Prescriptions</option>
+              <option value="transfer">Transfers</option>
+              <option value="vaccine">Vaccines</option>
+              <option value="appointment">Appointments</option>
+            </select>
+
+            <select
+              value={statusFilter}
+              onChange={(e) =>
+                setStatusFilter(e.target.value as RequestStatus | "all")
+              }
+              className="rounded-2xl border border-black/15 bg-white px-4 py-3 font-bold"
+            >
+              <option value="all">All Statuses</option>
+              <option value="new">New</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
+          {message && (
+            <p className="mt-4 rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">
+              {message}
+            </p>
+          )}
+
+          <div className="mt-6 space-y-4">
+            {loading ? (
+              <p className="py-12 text-center text-[#666]">
+                Loading requests...
+              </p>
+            ) : filtered.length === 0 ? (
+              <div className="rounded-[24px] bg-[#f5f5f5] p-10 text-center">
+                <p className="font-black">No requests found.</p>
+                <p className="mt-2 text-sm text-[#777]">
+                  Submit a test request from the public site to see it here.
+                </p>
+              </div>
+            ) : (
+              filtered.map((request) => (
+                <div
+                  key={request.id}
+                  className="rounded-[26px] border border-black/10 p-5"
+                >
+                  <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="rounded-full bg-[#303030] px-3 py-1 text-xs font-black text-white">
+                          {typeLabels[request.request_type]}
+                        </span>
+
+                        <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-black text-[#ed1c2e]">
+                          {request.reference}
+                        </span>
+
+                        {request.priority === "priority" && (
+                          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">
+                            PRIORITY
                           </span>
+                        )}
+                      </div>
 
-                          {request.priority ===
-                            "priority" && (
-                            <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-black text-[#ed1c2e]">
-                              PRIORITY
-                            </span>
-                          )}
+                      <h3 className="mt-4 text-xl font-black">
+                        {request.patient_name || "No name"}
+                      </h3>
 
-                          <span className="text-xs font-black text-[#777]">
-                            {request.reference}
-                          </span>
-                        </div>
-
-                        {request.note && (
-                          <p className="mt-4 text-sm leading-6 text-[#555]">
-                            {request.note}
+                      <div className="mt-3 grid gap-x-8 gap-y-2 text-sm text-[#666] sm:grid-cols-2 lg:grid-cols-3">
+                        {request.phone && (
+                          <p>
+                            <strong>Phone:</strong> {request.phone}
                           </p>
                         )}
 
-                        <p className="mt-4 text-xs text-[#888]">
-                          Received{" "}
-                          {new Date(
-                            request.createdAt
-                          ).toLocaleString()}
-                        </p>
+                        {request.medication_name && (
+                          <p>
+                            <strong>Medication:</strong>{" "}
+                            {request.medication_name}
+                          </p>
+                        )}
+
+                        {request.rx_number && (
+                          <p>
+                            <strong>Rx:</strong> {request.rx_number}
+                          </p>
+                        )}
+
+                        {request.vaccine_name && (
+                          <p>
+                            <strong>Vaccine:</strong> {request.vaccine_name}
+                          </p>
+                        )}
+
+                        {request.requested_date && (
+                          <p>
+                            <strong>Requested:</strong>{" "}
+                            {request.requested_date}
+                          </p>
+                        )}
+
+                        {request.current_pharmacy && (
+                          <p>
+                            <strong>Current pharmacy:</strong>{" "}
+                            {request.current_pharmacy}
+                          </p>
+                        )}
+
+                        {request.current_pharmacy_phone && (
+                          <p>
+                            <strong>Pharmacy phone:</strong>{" "}
+                            {request.current_pharmacy_phone}
+                          </p>
+                        )}
                       </div>
+
+                      {request.notes && (
+                        <div className="mt-4 rounded-2xl bg-[#f5f5f5] p-4 text-sm leading-6">
+                          {request.notes}
+                        </div>
+                      )}
+
+                      <p className="mt-4 text-xs text-[#888]">
+                        Received{" "}
+                        {new Date(request.created_at).toLocaleString()}
+                      </p>
+                    </div>
+
+                    <div className="grid min-w-[220px] gap-3">
+                      <label className="text-xs font-black uppercase tracking-wider text-[#777]">
+                        Status
+                      </label>
 
                       <select
                         value={request.status}
                         onChange={(e) =>
-                          changeStatus(
+                          void changeStatus(
                             request.id,
-                            e.target
-                              .value as RequestStatus
+                            e.target.value as RequestStatus
                           )
                         }
-                        className="w-fit rounded-full border border-black/15 bg-white px-4 py-2 text-sm font-black"
+                        className="rounded-xl border border-black/15 bg-white px-4 py-3 font-bold"
                       >
-                        <option value="new">
-                          New
-                        </option>
-                        <option value="in_progress">
-                          In Progress
-                        </option>
-                        <option value="completed">
-                          Completed
-                        </option>
+                        <option value="new">New</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
                       </select>
+
+                      <button
+                        onClick={() =>
+                          void changePriority(
+                            request.id,
+                            request.priority === "priority"
+                              ? "normal"
+                              : "priority"
+                          )
+                        }
+                        className="rounded-xl border border-black/15 px-4 py-3 text-sm font-black"
+                      >
+                        {request.priority === "priority"
+                          ? "Remove Priority"
+                          : "Mark Priority"}
+                      </button>
+
+                      <div className="rounded-xl bg-[#f5f5f5] px-4 py-3 text-center text-xs font-black">
+                        {statusLabels[request.status]}
+                      </div>
                     </div>
-                  </article>
-                ))
-              )}
-            </div>
-          </section>
-
-          <aside className="h-fit rounded-[30px] bg-[#303030] p-6 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff6b77]">
-              Staff Tool
-            </p>
-
-            <h2 className="mt-3 text-2xl font-black">
-              Create Request
-            </h2>
-
-            <p className="mt-2 text-sm leading-6 text-white/60">
-              Create a non-patient-identifying work item for
-              testing or internal follow-up.
-            </p>
-
-            <div className="mt-6 space-y-4">
-              <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-wider text-white/60">
-                  Request Type
-                </label>
-
-                <select
-                  value={newType}
-                  onChange={(e) =>
-                    setNewType(
-                      e.target.value as RequestType
-                    )
-                  }
-                  className="w-full rounded-2xl bg-white px-4 py-3 font-bold text-[#303030]"
-                >
-                  <option value="prescription">
-                    Prescription
-                  </option>
-                  <option value="transfer">
-                    Transfer
-                  </option>
-                  <option value="vaccine">
-                    Vaccine
-                  </option>
-                  <option value="appointment">
-                    Appointment
-                  </option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-wider text-white/60">
-                  Priority
-                </label>
-
-                <select
-                  value={newPriority}
-                  onChange={(e) =>
-                    setNewPriority(
-                      e.target.value as Priority
-                    )
-                  }
-                  className="w-full rounded-2xl bg-white px-4 py-3 font-bold text-[#303030]"
-                >
-                  <option value="normal">
-                    Normal
-                  </option>
-                  <option value="priority">
-                    Priority
-                  </option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-xs font-black uppercase tracking-wider text-white/60">
-                  Internal Note
-                </label>
-
-                <textarea
-                  value={newNote}
-                  onChange={(e) =>
-                    setNewNote(e.target.value)
-                  }
-                  rows={4}
-                  placeholder="Example: Follow up with transfer request."
-                  className="w-full resize-none rounded-2xl bg-white px-4 py-3 text-[#303030] outline-none"
-                />
-              </div>
-
-              <button
-                type="button"
-                onClick={createRequest}
-                className="w-full rounded-full bg-[#ed1c2e] px-5 py-3 font-black text-white"
-              >
-                Add to Queue
-              </button>
-            </div>
-
-            <div className="mt-7 border-t border-white/10 pt-6">
-              <p className="text-xs font-black uppercase tracking-wider text-white/40">
-                Workflow
-              </p>
-
-              <p className="mt-3 text-sm font-bold">
-                NEW → IN PROGRESS → COMPLETED
-              </p>
-            </div>
-          </aside>
-        </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
       </div>
     </main>
   );
 }
 
-function Stat({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) {
+function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[26px] bg-white p-6 shadow-sm">
       <p className="text-xs font-black uppercase tracking-wider text-[#777]">
         {label}
       </p>
-
-      <p className="mt-2 text-4xl font-black">
-        {value}
-      </p>
+      <p className="mt-2 text-4xl font-black">{value}</p>
     </div>
   );
 }

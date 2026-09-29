@@ -1,22 +1,84 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+
+const vaccines = [
+  {
+    title: "Flu Vaccine",
+    text: "Ask Bellewood about seasonal flu vaccination availability.",
+  },
+  {
+    title: "COVID-19 Vaccine",
+    text: "Contact the pharmacy for current COVID-19 vaccine options.",
+  },
+  {
+    title: "Shingles Vaccine",
+    text: "Ask the pharmacy team about shingles vaccination availability.",
+  },
+  {
+    title: "Tdap Vaccine",
+    text: "Contact Bellewood for Tdap vaccine scheduling information.",
+  },
+];
+
 export default function VaccinesPage() {
-  const vaccines = [
-    {
-      title: "Flu Vaccine",
-      text: "Ask Bellewood about seasonal flu vaccination availability.",
-    },
-    {
-      title: "COVID-19 Vaccine",
-      text: "Contact the pharmacy for current COVID-19 vaccine options.",
-    },
-    {
-      title: "Shingles Vaccine",
-      text: "Ask the pharmacy team about shingles vaccination availability.",
-    },
-    {
-      title: "Tdap Vaccine",
-      text: "Contact Bellewood for Tdap vaccine scheduling information.",
-    },
-  ];
+  const [form, setForm] = useState({
+    patientName: "",
+    phone: "",
+    vaccineName: "",
+    requestedDate: "",
+    notes: "",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  function update(field: string, value: string) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setSuccess("");
+    setError("");
+
+    try {
+      const response = await fetch("/api/requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestType: "vaccine",
+          ...form,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "Unable to submit appointment.");
+      }
+
+      setSuccess(data.reference);
+
+      setForm({
+        patientName: "",
+        phone: "",
+        vaccineName: "",
+        requestedDate: "",
+        notes: "",
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to submit appointment."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
@@ -53,14 +115,12 @@ export default function VaccinesPage() {
 
             <h2 className="mt-4 text-5xl font-black tracking-tight">
               Protect your health
-              <span className="block text-[#ed1c2e]">
-                close to home.
-              </span>
+              <span className="block text-[#ed1c2e]">close to home.</span>
             </h2>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Ask Bellewood Pharmacy about available vaccinations and scheduling
-              options in Leesburg.
+              Ask Bellewood Pharmacy about available vaccinations and
+              scheduling options in Leesburg.
             </p>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -73,9 +133,7 @@ export default function VaccinesPage() {
                     +
                   </div>
 
-                  <h3 className="mt-5 text-xl font-black">
-                    {vaccine.title}
-                  </h3>
+                  <h3 className="mt-5 text-xl font-black">{vaccine.title}</h3>
 
                   <p className="mt-3 text-sm leading-6 text-gray-500">
                     {vaccine.text}
@@ -94,22 +152,29 @@ export default function VaccinesPage() {
               Request an appointment.
             </h3>
 
-            <div className="mt-7 grid gap-4">
+            <form onSubmit={submit} className="mt-7 grid gap-4">
               <input
-                type="text"
+                required
+                value={form.patientName}
+                onChange={(e) => update("patientName", e.target.value)}
                 placeholder="First and last name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <input
+                required
                 type="tel"
+                value={form.phone}
+                onChange={(e) => update("phone", e.target.value)}
                 placeholder="Phone number"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <select
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-                defaultValue=""
+                required
+                value={form.vaccineName}
+                onChange={(e) => update("vaccineName", e.target.value)}
+                className="rounded-xl border border-gray-200 bg-white px-4 py-3 outline-none focus:border-[#ed1c2e]"
               >
                 <option value="" disabled>
                   Select vaccine
@@ -121,27 +186,43 @@ export default function VaccinesPage() {
               </select>
 
               <input
+                required
                 type="date"
+                value={form.requestedDate}
+                onChange={(e) => update("requestedDate", e.target.value)}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <textarea
+                value={form.notes}
+                onChange={(e) => update("notes", e.target.value)}
                 placeholder="Additional notes"
                 rows={4}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <button
-                type="button"
-                className="rounded-full bg-[#ed1c2e] px-6 py-4 font-bold text-white"
+                disabled={submitting}
+                className="rounded-full bg-[#ed1c2e] px-6 py-4 font-bold text-white disabled:opacity-50"
               >
-                Request Appointment
+                {submitting ? "Submitting..." : "Request Appointment"}
               </button>
 
-              <p className="text-center text-xs text-gray-400">
-                Demo scheduling experience
-              </p>
-            </div>
+              {success && (
+                <div className="rounded-2xl bg-green-50 p-4 text-sm text-green-800">
+                  <p className="font-black">Appointment request received.</p>
+                  <p className="mt-1">
+                    Reference: <strong>{success}</strong>
+                  </p>
+                </div>
+              )}
+
+              {error && (
+                <div className="rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">
+                  {error}
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </section>
