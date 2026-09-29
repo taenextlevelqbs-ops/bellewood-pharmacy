@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-type RxConcept = {
+type Candidate = {
+  rxcui?: string;
+  score?: string;
+  rank?: string;
+};
+
+type RxProperties = {
   rxcui?: string;
   name?: string;
   synonym?: string;
   tty?: string;
-  language?: string;
-  suppress?: string;
-  umlscui?: string;
 };
 
 type DrugResult = {
@@ -28,27 +31,38 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const approximateUrl =
+    const searchUrl =
       "https://rxnav.nlm.nih.gov/REST/approximateTerm.json?term=" +
       encodeURIComponent(query) +
-      "&maxEntries=15&option=1";
+      "&maxEntries=20&option=1";
 
-    const approximateResponse = await fetch(approximateUrl, {
-      headers: { Accept: "application/json" },
+    const searchResponse = await fetch(searchUrl, {
+      headers: {
+        Accept: "application/json",
+      },
       cache: "no-store",
     });
 
-    if (!approximateResponse.ok) {
-      return NextResponse.json({
-        suggestions: [],
-        results: [],
-      });
+    if (!searchResponse.ok) {
+      console.error(
+        "RxNorm approximate search failed:",
+        searchResponse.status
+      );
+
+      return NextResponse.json(
+        {
+          suggestions: [],
+          results: [],
+          error: "RxNorm search failed",
+        },
+        { status: 502 }
+      );
     }
 
-    const approximateData = await approximateResponse.json();
+    const searchData = await searchResponse.json();
 
-    const candidates: Array<{ rxcui?: string }> =
-      approximateData?.approximateGroup?.candidate ?? [];
+    const candidates: Candidate[] =
+      searchData?.approximateGroup?.candidate ?? [];
 
     const ids = Array.from(
       new Set(
@@ -58,25 +72,40 @@ export async function GET(request: NextRequest) {
       )
     ).slice(0, 12);
 
+    if (ids.length === 0) {
+      return NextResponse.json({
+        suggestions: [],
+        results: [],
+      });
+    }
+
     const concepts = await Promise.all(
       ids.map(async (id): Promise<DrugResult | null> => {
         try {
-          const response = await fetch(
-            `https://rxnav.nlm.nih.gov/REST/rxcui/${encodeURIComponent(
-              id
-            )}/properties.json`,
-            {
-              headers: { Accept: "application/json" },
-              cache: "no-store",
-            }
-          );
+          const propertiesUrl =
+            "https://rxnav.nlm.nih.gov/REST/rxcui/" +
+            encodeURIComponent(id) +
+            "/properties.json";
 
-          if (!response.ok) return null;
+          const response = await fetch(propertiesUrl, {
+            headers: {
+              Accept: "application/json",
+            },
+            cache: "no-store",
+          });
+
+          if (!response.ok) {
+            return null;
+          }
 
           const data = await response.json();
-          const properties: RxConcept | undefined = data?.properties;
 
-          if (!properties?.name) return null;
+          const properties: RxProperties | undefined =
+            data?.properties;
+
+          if (!properties?.name) {
+            return null;
+          }
 
           return {
             rxcui: id,
@@ -109,11 +138,15 @@ export async function GET(request: NextRequest) {
       results,
     });
   } catch (error) {
-    console.error("RxNorm search error:", error);
+    console.error("RxNorm API error:", error);
 
-    return NextResponse.json({
-      suggestions: [],
-      results: [],
-    });
+    return NextResponse.json(
+      {
+        suggestions: [],
+        results: [],
+        error: "Unable to search medications",
+      },
+      { status: 500 }
+    );
   }
 }
