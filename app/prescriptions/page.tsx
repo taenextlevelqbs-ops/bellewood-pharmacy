@@ -3,35 +3,32 @@
 import { FormEvent, useState } from "react";
 
 export default function PrescriptionsPage() {
-  const [form, setForm] = useState({
-    patientName: "",
-    phone: "",
-    rxNumber: "",
-    medicationName: "",
-    notes: "",
-  });
-
-  const [submitting, setSubmitting] = useState(false);
+  const [name, setName] = useState("");
+  const [rxNumber, setRxNumber] = useState("");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  function update(field: string, value: string) {
-    setForm((current) => ({ ...current, [field]: value }));
-  }
-
-  async function submit(e: FormEvent<HTMLFormElement>) {
+  async function submitRequest(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitting(true);
+
+    setLoading(true);
     setSuccess("");
     setError("");
 
     try {
       const response = await fetch("/api/requests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           requestType: "prescription",
-          ...form,
+          patientName: name,
+          phone,
+          rxNumber,
+          notes: "Prescription status request",
         }),
       });
 
@@ -42,20 +39,17 @@ export default function PrescriptionsPage() {
       }
 
       setSuccess(data.reference);
-
-      setForm({
-        patientName: "",
-        phone: "",
-        rxNumber: "",
-        medicationName: "",
-        notes: "",
-      });
+      setName("");
+      setPhone("");
+      setRxNumber("");
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Unable to submit request."
+        err instanceof Error
+          ? err.message
+          : "Unable to submit request."
       );
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   }
 
@@ -85,109 +79,79 @@ export default function PrescriptionsPage() {
         </div>
       </nav>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              Prescriptions
-            </p>
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <div className="rounded-[34px] bg-[#303030] p-8 md:p-12">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ff6673]">
+            Prescription Support
+          </p>
 
-            <h2 className="mt-4 text-5xl font-black tracking-tight">
-              Pharmacy support
-              <span className="block text-[#ed1c2e]">
-                when you need it.
-              </span>
-            </h2>
+          <h2 className="mt-4 text-4xl font-black text-white md:text-5xl">
+            Need an update on your prescription?
+          </h2>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Send Bellewood Pharmacy a prescription request and our team can
-              review it and follow up with you.
-            </p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">
+            Send your prescription information to Bellewood Pharmacy and a
+            member of the pharmacy team can review your request.
+          </p>
 
-            <div className="mt-10 grid gap-4">
-              {[
-                "Prescription questions",
-                "Refill requests",
-                "Medication assistance",
-                "Pharmacy follow-up",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[22px] bg-white p-5 font-black shadow-sm"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
+          <form
+            onSubmit={submitRequest}
+            className="mt-10 rounded-[28px] bg-white p-7 md:p-9"
+          >
+            <div className="grid gap-5">
+              <div>
+                <label className="mb-2 block text-sm font-black">
+                  Full Name
+                </label>
+                <input
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="First and last name"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
+                />
+              </div>
 
-            <a
-              href="/availability"
-              className="mt-6 inline-block rounded-full border border-black/10 bg-white px-6 py-3 font-bold"
-            >
-              Check Medication Availability
-            </a>
-          </div>
+              <div>
+                <label className="mb-2 block text-sm font-black">
+                  Phone Number
+                </label>
+                <input
+                  required
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
+                />
+              </div>
 
-          <div className="rounded-[34px] bg-white p-8 shadow-xl">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              Prescription Request
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black">
-              Contact the pharmacy team.
-            </h3>
-
-            <form onSubmit={submit} className="mt-7 grid gap-4">
-              <input
-                required
-                value={form.patientName}
-                onChange={(e) => update("patientName", e.target.value)}
-                placeholder="First and last name"
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
-
-              <input
-                required
-                type="tel"
-                value={form.phone}
-                onChange={(e) => update("phone", e.target.value)}
-                placeholder="Phone number"
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
-
-              <input
-                value={form.rxNumber}
-                onChange={(e) => update("rxNumber", e.target.value)}
-                placeholder="Prescription number, if available"
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
-
-              <input
-                value={form.medicationName}
-                onChange={(e) => update("medicationName", e.target.value)}
-                placeholder="Medication name"
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
-
-              <textarea
-                required
-                value={form.notes}
-                onChange={(e) => update("notes", e.target.value)}
-                placeholder="How can the pharmacy help?"
-                rows={5}
-                className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
-              />
+              <div>
+                <label className="mb-2 block text-sm font-black">
+                  Prescription Number
+                </label>
+                <input
+                  required
+                  value={rxNumber}
+                  onChange={(e) => setRxNumber(e.target.value)}
+                  placeholder="Prescription number"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
+                />
+              </div>
 
               <button
-                disabled={submitting}
-                className="rounded-full bg-[#ed1c2e] px-6 py-4 font-bold text-white disabled:opacity-50"
+                type="submit"
+                disabled={loading}
+                className="mt-2 rounded-full bg-[#ed1c2e] px-6 py-4 font-black text-white disabled:opacity-60"
               >
-                {submitting ? "Submitting..." : "Submit Prescription Request"}
+                {loading ? "Submitting..." : "Send Prescription Request"}
               </button>
 
               {success && (
                 <div className="rounded-2xl bg-green-50 p-4 text-sm text-green-800">
-                  <p className="font-black">Request received.</p>
+                  <p className="font-black">
+                    Request sent successfully.
+                  </p>
                   <p className="mt-1">
                     Reference: <strong>{success}</strong>
                   </p>
@@ -199,8 +163,8 @@ export default function PrescriptionsPage() {
                   {error}
                 </div>
               )}
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </section>
     </main>
