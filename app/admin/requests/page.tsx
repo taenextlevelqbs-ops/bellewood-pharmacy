@@ -143,6 +143,33 @@ export default function RequestsPage() {
     }
   }
 
+  async function deleteRequest(id: string, reference: string) {
+    const confirmed = window.confirm(
+      `Delete request ${reference}? This cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    setMessage("");
+
+    const { error } = await supabase
+      .from("pharmacy_requests")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("DELETE REQUEST ERROR:", error);
+      setMessage(`Could not delete request: ${error.message}`);
+      return;
+    }
+
+    setRequests((current) =>
+      current.filter((request) => request.id !== id)
+    );
+
+    setMessage(`Request ${reference} deleted.`);
+  }
+
   const stats = useMemo(
     () => ({
       total: requests.length,
@@ -424,6 +451,19 @@ export default function RequestsPage() {
                         {request.priority === "priority"
                           ? "Remove Priority"
                           : "Mark Priority"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void deleteRequest(
+                            request.id,
+                            request.reference
+                          )
+                        }
+                        className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700 transition hover:bg-red-100"
+                      >
+                        Delete Request
                       </button>
 
                       <div className="rounded-xl bg-[#f5f5f5] px-4 py-3 text-center text-xs font-black">
