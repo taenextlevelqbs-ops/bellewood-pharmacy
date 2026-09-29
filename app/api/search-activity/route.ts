@@ -84,3 +84,64 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+
+export async function GET(request: NextRequest) {
+  try {
+    const range = request.nextUrl.searchParams.get("range") || "today";
+    const supabase = getSupabase();
+
+    let query = supabase
+      .from("medication_search_activity")
+      .select("id, search_term, matched, result_count, created_at")
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    const now = new Date();
+
+    if (range === "today") {
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      query = query.gte("created_at", start.toISOString());
+    }
+
+    if (range === "week") {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 7);
+      query = query.gte("created_at", start.toISOString());
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("SEARCH ACTIVITY GET ERROR:", error);
+
+      return NextResponse.json(
+        {
+          ok: false,
+          error: error.message,
+          code: error.code,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      ok: true,
+      rows: data || [],
+    });
+  } catch (error) {
+    console.error("SEARCH ACTIVITY GET API ERROR:", error);
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unknown search activity error",
+      },
+      { status: 500 }
+    );
+  }
+}

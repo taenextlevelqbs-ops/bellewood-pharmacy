@@ -23,37 +23,37 @@ export default function SearchActivityPage() {
   const [range, setRange] = useState<"today" | "week" | "all">("week");
 
   async function load(silent = false) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      router.replace("/admin/login");
-      return;
+    if (!silent) {
+      setLoading(true);
     }
 
-    let query = supabase
-      .from("medication_search_activity")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(500);
+    try {
+      const response = await fetch(
+        `/api/search-activity?range=${encodeURIComponent(range)}`,
+        {
+          cache: "no-store",
+        }
+      );
 
-    if (range === "today") {
-      const start = new Date();
-      start.setHours(0, 0, 0, 0);
-      query = query.gte("created_at", start.toISOString());
+      if (!response.ok) {
+        throw new Error(`Search activity request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(data.error || "Could not load search activity");
+      }
+
+      setRows(Array.isArray(data.rows) ? data.rows : []);
+    } catch (error) {
+      console.error("Could not load search activity:", error);
+      setRows([]);
+    } finally {
+      if (!silent) {
+        setLoading(false);
+      }
     }
-
-    if (range === "week") {
-      const start = new Date();
-      start.setDate(start.getDate() - 7);
-      query = query.gte("created_at", start.toISOString());
-    }
-
-    const { data } = await query;
-
-    setRows((data as SearchRow[]) || []);
-    if (!silent) setLoading(false);
   }
 
   useEffect(() => {
