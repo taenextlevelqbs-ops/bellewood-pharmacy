@@ -85,9 +85,19 @@ export default function AvailabilityPage() {
       .order("medication_name", { ascending: true })
       .limit(20);
 
-    setResults((data as Medication[]) || []);
+    const medications = (data as Medication[]) || [];
+
+    setResults(medications);
     setSearched(true);
     setLoading(false);
+
+    // Record only anonymous medication search activity.
+    // No patient name, email, phone, Rx number, or other identity is stored.
+    void logMedicationSearch(
+      term,
+      medications.length > 0,
+      medications.length
+    );
   }
 
   return (
