@@ -31,7 +31,7 @@ export default function PharmacistPage() {
           <div className="relative">
             <div className="overflow-hidden rounded-[36px] bg-white shadow-xl">
               <img
-                src="/pharmacist.jpg"
+                src="/owner.jpeg"
                 alt="Ak Brahmbhatt, PharmD"
                 className="h-[540px] w-full object-cover object-top"
               />

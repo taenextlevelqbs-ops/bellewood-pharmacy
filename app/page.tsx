@@ -839,7 +839,7 @@ export default function Home() {
             <div className="relative">
               <div className="overflow-hidden rounded-[34px] bg-white shadow-xl">
                 <img
-                  src="/pharmacist.jpg"
+                  src="/owner.jpeg"
                   alt="Ak Brahmbhatt, PharmD, pharmacist at Bellewood Pharmacy"
                   className="h-[520px] w-full object-cover object-top"
                 />
