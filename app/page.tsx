@@ -907,6 +907,178 @@ export default function Home() {
         </div>
       </section>
 
+
+      {/* PHARMACY TEAM */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
+                Your Local Pharmacy Team
+              </p>
+
+              <h3 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+                Pharmacy care starts
+                <span className="block text-[#ed1c2e]">
+                  with people who know you.
+                </span>
+              </h3>
+
+              <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
+                Bellewood Pharmacy is built around personal service,
+                accessible pharmacy support, and a local team committed to
+                helping patients understand and manage their medications.
+              </p>
+
+              <p className="mt-5 max-w-xl leading-7 text-gray-500">
+                Meet the pharmacists and team members behind Bellewood.
+                Individual team profiles and credentials will be added here.
+              </p>
+            </div>
+
+            <div className="rounded-[36px] bg-[#303030] p-8 text-white md:p-10">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ed1c2e] text-2xl font-black">
+                B
+              </div>
+
+              <p className="mt-8 text-xs font-black uppercase tracking-[0.2em] text-[#ff6b77]">
+                Meet Your Pharmacist
+              </p>
+
+              <h4 className="mt-3 text-3xl font-black">
+                Local expertise. Personal attention.
+              </h4>
+
+              <p className="mt-5 leading-7 text-white/70">
+                Have a question about your prescriptions, wellness products,
+                insurance, or pharmacy services? Talk directly with the
+                Bellewood Pharmacy team.
+              </p>
+
+              <a
+                href="tel:+17037777100"
+                className="mt-7 inline-flex rounded-full bg-white px-6 py-3 font-black text-[#303030] transition hover:bg-gray-100"
+              >
+                Contact the Pharmacy
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* PATIENT RESOURCES */}
+      <section className="bg-[#f4f4f4]">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
+              Patient Resources
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+              Helpful information.
+              <span className="block text-[#ed1c2e]">
+                Easy to find.
+              </span>
+            </h3>
+
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-gray-600">
+              Find information about insurance, patient privacy, accessibility,
+              and Bellewood Pharmacy website policies.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+            <a
+              href="/insurance"
+              className="group rounded-[28px] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 font-black text-[#ed1c2e]">
+                $
+              </div>
+
+              <h4 className="mt-6 text-xl font-black">
+                Insurance & Payment
+              </h4>
+
+              <p className="mt-3 leading-7 text-gray-500">
+                Learn more about insurance coverage and payment questions.
+              </p>
+
+              <p className="mt-6 font-bold text-[#ed1c2e]">
+                Insurance information →
+              </p>
+            </a>
+
+            <a
+              href="/hipaa"
+              className="group rounded-[28px] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 font-black text-[#ed1c2e]">
+                +
+              </div>
+
+              <h4 className="mt-6 text-xl font-black">
+                HIPAA & Patient Privacy
+              </h4>
+
+              <p className="mt-3 leading-7 text-gray-500">
+                Information about patient privacy and health information.
+              </p>
+
+              <p className="mt-6 font-bold text-[#ed1c2e]">
+                Privacy information →
+              </p>
+            </a>
+
+            <a
+              href="/accessibility"
+              className="group rounded-[28px] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 font-black text-[#ed1c2e]">
+                A
+              </div>
+
+              <h4 className="mt-6 text-xl font-black">
+                Accessibility
+              </h4>
+
+              <p className="mt-3 leading-7 text-gray-500">
+                Learn about Bellewood Pharmacy's commitment to accessible
+                website experiences.
+              </p>
+
+              <p className="mt-6 font-bold text-[#ed1c2e]">
+                Accessibility statement →
+              </p>
+            </a>
+
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-black/10 pt-7 text-sm font-bold text-[#555]">
+            <a href="/privacy" className="transition hover:text-[#ed1c2e]">
+              Privacy Policy
+            </a>
+
+            <a href="/hipaa" className="transition hover:text-[#ed1c2e]">
+              HIPAA Notice
+            </a>
+
+            <a href="/accessibility" className="transition hover:text-[#ed1c2e]">
+              Accessibility
+            </a>
+
+            <a href="/terms" className="transition hover:text-[#ed1c2e]">
+              Terms & Conditions
+            </a>
+          </div>
+
+        </div>
+      </section>
+
       {/* LOCAL CARE */}
       <section className="bg-white">
 
