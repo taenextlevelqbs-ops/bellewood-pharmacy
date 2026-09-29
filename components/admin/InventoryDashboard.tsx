@@ -87,31 +87,61 @@ export default function InventoryDashboard() {
     if (query.length < 2) {
       setDrugSuggestions([]);
       setShowDrugSuggestions(false);
+      setDrugSearchLoading(false);
       return;
     }
+
+    const controller = new AbortController();
 
     const timer = window.setTimeout(async () => {
       setDrugSearchLoading(true);
 
       try {
         const response = await fetch(
-          `/api/drugs?q=${encodeURIComponent(query)}`
+          `/api/drugs?q=${encodeURIComponent(query)}`,
+          {
+            signal: controller.signal,
+            cache: "no-store",
+          }
         );
+
+        if (!response.ok) {
+          throw new Error(`Drug search failed: ${response.status}`);
+        }
 
         const data = await response.json();
 
-        setDrugSuggestions(
-          Array.isArray(data.suggestions) ? data.suggestions : []
-        );
-        setShowDrugSuggestions(true);
-      } catch {
-        setDrugSuggestions([]);
-      } finally {
-        setDrugSearchLoading(false);
-      }
-    }, 300);
+        const suggestions = Array.isArray(data.suggestions)
+          ? data.suggestions.filter(
+              (drug: unknown): drug is string =>
+                typeof drug === "string" && drug.trim().length > 0
+            )
+          : [];
 
-    return () => window.clearTimeout(timer);
+        setDrugSuggestions(suggestions.slice(0, 10));
+        setShowDrugSuggestions(true);
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error("Admin drug search failed:", error);
+        setDrugSuggestions([]);
+        setShowDrugSuggestions(true);
+      } finally {
+        if (!controller.signal.aborted) {
+          setDrugSearchLoading(false);
+        }
+      }
+    }, 250);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
   }, [name]);
 
   async function addMedication(e: FormEvent) {
