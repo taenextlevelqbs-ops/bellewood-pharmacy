@@ -95,7 +95,13 @@ export async function POST(request: NextRequest) {
       console.error("REQUEST INSERT ERROR:", error);
 
       return NextResponse.json(
-        { ok: false, error: "Unable to submit request." },
+        {
+          ok: false,
+          error: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+        },
         { status: 500 }
       );
     }
