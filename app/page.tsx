@@ -255,6 +255,22 @@ export default function Home() {
                 </p>
               </a>
 
+              <a
+                href="/availability"
+                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50 sm:col-span-2"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-bold">Check Medication Availability</p>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Looking for a medication? Check with Bellewood before your visit.
+                    </p>
+                  </div>
+
+                  <span className="text-xl font-black text-[#ed1c2e]">→</span>
+                </div>
+              </a>
+
             </div>
           </div>
 
@@ -656,7 +672,7 @@ export default function Home() {
 
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
 
             {[
               {
@@ -671,29 +687,223 @@ export default function Home() {
                 title: "Wellness Support",
                 text: "Talk with the pharmacy team about your wellness needs.",
               },
+              {
+                title: "Compounding Services",
+                text: "Ask our pharmacy team about customized medication options and available compounding services.",
+                href: "tel:5714101556",
+                button: "Inquire for More Details",
+              },
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-[28px] bg-white p-7 shadow-sm"
+                className="flex rounded-[28px] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
+                <div className="flex w-full flex-col">
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 font-black text-[#ed1c2e]">
-                  +
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 font-black text-[#ed1c2e]">
+                    +
+                  </div>
+
+                  <h4 className="mt-6 text-xl font-black">
+                    {item.title}
+                  </h4>
+
+                  <p className="mt-3 leading-7 text-gray-500">
+                    {item.text}
+                  </p>
+
+                  {item.href && (
+                    <a
+                      href={item.href}
+                      className="mt-auto pt-6 font-bold text-[#ed1c2e]"
+                    >
+                      {item.button} →
+                    </a>
+                  )}
+
                 </div>
-
-                <h4 className="mt-6 text-xl font-black">
-                  {item.title}
-                </h4>
-
-                <p className="mt-3 leading-7 text-gray-500">
-                  {item.text}
-                </p>
-
               </div>
             ))}
 
           </div>
 
+        </div>
+      </section>
+
+      {/* ABOUT BELLEWOOD */}
+      <section id="about" className="bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+
+            <div className="relative overflow-hidden rounded-[38px] bg-[#303030] p-9 text-white md:p-12">
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#ed1c2e] opacity-20" />
+
+              <div className="relative">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ff6b77]">
+                  Your Local Pharmacy
+                </p>
+
+                <h3 className="mt-5 text-4xl font-black tracking-tight md:text-5xl">
+                  Pharmacy care built around people.
+                </h3>
+
+                <p className="mt-6 leading-8 text-white/65">
+                  Bellewood Pharmacy serves the Leesburg community with
+                  accessible pharmacy services, personal support, and a local
+                  team patients can contact directly.
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
+                    Leesburg, VA
+                  </span>
+
+                  <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
+                    Independent Pharmacy
+                  </span>
+
+                  <span className="rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
+                    Se Habla Español
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
+                About Bellewood
+              </p>
+
+              <h3 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+                A more personal pharmacy experience.
+              </h3>
+
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Bellewood Pharmacy combines modern pharmacy convenience with
+                the personal attention of a neighborhood pharmacy. Whether you
+                are managing prescriptions, transferring medications, looking
+                for wellness support, or simply have a question, the Bellewood
+                team is here to help.
+              </p>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+
+                <div className="rounded-[24px] bg-[#f8f8f8] p-6">
+                  <p className="font-black">Personal Support</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-500">
+                    Connect directly with a local pharmacy team when you need help.
+                  </p>
+                </div>
+
+                <div className="rounded-[24px] bg-[#f8f8f8] p-6">
+                  <p className="font-black">Convenient Services</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-500">
+                    Prescriptions, transfers, vaccines, wellness, and more in one place.
+                  </p>
+                </div>
+
+                <div className="rounded-[24px] bg-[#f8f8f8] p-6">
+                  <p className="font-black">Local Care</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-500">
+                    Proudly serving patients in Leesburg and the surrounding community.
+                  </p>
+                </div>
+
+                <div className="rounded-[24px] bg-[#f8f8f8] p-6">
+                  <p className="font-black">Bilingual Support</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-500">
+                    Se Habla Español for patients and families who prefer Spanish.
+                  </p>
+                </div>
+
+              </div>
+
+              <a
+                href="tel:5714101556"
+                className="mt-8 inline-block rounded-full bg-[#ed1c2e] px-7 py-4 font-bold text-white transition hover:bg-[#cf1727]"
+              >
+                Talk With Our Pharmacy Team
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* COMMUNITY TRUST */}
+      <section className="bg-[#f8f8f8]">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+
+          <div className="text-center">
+            <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
+              Community Focused
+            </p>
+
+            <h3 className="mt-4 text-4xl font-black tracking-tight md:text-5xl">
+              Local care you can count on.
+            </h3>
+
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-gray-500">
+              Bellewood is focused on making everyday pharmacy care simpler,
+              more accessible, and more personal for the Leesburg community.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+
+            <div className="rounded-[28px] bg-white p-8 shadow-sm">
+              <div className="text-3xl font-black text-[#ed1c2e]">01</div>
+              <h4 className="mt-5 text-xl font-black">
+                Easy Prescription Transfers
+              </h4>
+              <p className="mt-3 leading-7 text-gray-500">
+                Ready for a local pharmacy experience? Bellewood can help you
+                get started with a prescription transfer.
+              </p>
+              <a
+                href="/transfer"
+                className="mt-6 inline-block font-bold text-[#ed1c2e]"
+              >
+                Start a Transfer →
+              </a>
+            </div>
+
+            <div className="rounded-[28px] bg-white p-8 shadow-sm">
+              <div className="text-3xl font-black text-[#ed1c2e]">02</div>
+              <h4 className="mt-5 text-xl font-black">
+                Medication Availability
+              </h4>
+              <p className="mt-3 leading-7 text-gray-500">
+                Looking for a medication? Check with Bellewood before your
+                visit and confirm current availability.
+              </p>
+              <a
+                href="/availability"
+                className="mt-6 inline-block font-bold text-[#ed1c2e]"
+              >
+                Check Availability →
+              </a>
+            </div>
+
+            <div className="rounded-[28px] bg-white p-8 shadow-sm">
+              <div className="text-3xl font-black text-[#ed1c2e]">03</div>
+              <h4 className="mt-5 text-xl font-black">
+                Questions? Just Ask.
+              </h4>
+              <p className="mt-3 leading-7 text-gray-500">
+                Contact the pharmacy directly or use the Bellewood Assistant
+                for quick answers about pharmacy services.
+              </p>
+              <a
+                href="tel:5714101556"
+                className="mt-6 inline-block font-bold text-[#ed1c2e]"
+              >
+                Call Pharmacy →
+              </a>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -1041,6 +1251,14 @@ export default function Home() {
               </p>
 
               <p>
+                <a href="/availability">Medication Availability</a>
+              </p>
+
+              <p>
+                <a href="/insurance">Insurance Support</a>
+              </p>
+
+              <p>
                 <a href="#wellness">Wellness</a>
               </p>
 
@@ -1069,7 +1287,7 @@ export default function Home() {
         </div>
 
         <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/35">
-          © 2026 Bellewood Pharmacy. Demo Website.
+          © 2026 Bellewood Pharmacy. All rights reserved.
         </div>
 
       </footer>
