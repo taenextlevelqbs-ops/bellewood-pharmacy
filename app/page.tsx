@@ -75,8 +75,12 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
           <a href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
-              Rx
+            <div className="flex h-12 w-12 items-center justify-center overflow-hidden">
+              <img
+                src="/comanylogo.png"
+                alt="Bellewood Pharmacy logo"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <div>
