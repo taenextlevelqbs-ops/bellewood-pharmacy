@@ -911,6 +911,15 @@ export default function Home() {
                 </a>
               </div>
 
+              <div className="mt-8">
+                <a
+                  href="/pharmacist"
+                  className="inline-flex items-center rounded-full bg-[#303030] px-7 py-4 text-sm font-black text-white transition hover:bg-[#ed1c2e]"
+                >
+                  Meet Your Pharmacist →
+                </a>
+              </div>
+
               <div className="mt-10 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[22px] bg-white p-5 shadow-sm">
                   <p className="text-xs font-black uppercase tracking-[0.15em] text-[#999]">
