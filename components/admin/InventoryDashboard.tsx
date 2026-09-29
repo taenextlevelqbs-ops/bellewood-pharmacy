@@ -164,7 +164,7 @@ export default function InventoryDashboard() {
   });
 
   return (
-    <main className="min-h-screen bg-[#f5f5f5] text-[#303030]">
+    <main className="min-h-screen bg-white text-[#303030]">
       <header className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 px-6 py-5">
           <div>
@@ -249,7 +249,7 @@ export default function InventoryDashboard() {
               </button>
 
               {message && (
-                <p className="text-center text-sm font-bold text-gray-500">
+                <p className="text-center text-sm font-bold text-[#555]">
                   {message}
                 </p>
               )}
@@ -283,11 +283,11 @@ export default function InventoryDashboard() {
 
             <div className="mt-5 space-y-3">
               {loading ? (
-                <div className="rounded-[26px] bg-white p-8 text-gray-400">
+                <div className="rounded-[26px] bg-white p-8 text-[#666]">
                   Loading inventory...
                 </div>
               ) : filtered.length === 0 ? (
-                <div className="rounded-[26px] bg-white p-8 text-gray-400 shadow-sm">
+                <div className="rounded-[26px] bg-white p-8 text-[#666] shadow-sm">
                   No medications found.
                 </div>
               ) : (
@@ -302,13 +302,13 @@ export default function InventoryDashboard() {
                           {medication.medication_name}
                         </h3>
 
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 text-sm text-[#555]">
                           {[medication.strength, medication.dosage_form]
                             .filter(Boolean)
                             .join(" • ") || "No strength/form specified"}
                         </p>
 
-                        <p className="mt-2 text-xs text-gray-400">
+                        <p className="mt-2 text-xs text-[#666]">
                           Updated{" "}
                           {new Date(medication.updated_at).toLocaleString()}
                         </p>
