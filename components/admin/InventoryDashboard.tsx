@@ -43,6 +43,9 @@ export default function InventoryDashboard() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Status | "all">("all");
   const [name, setName] = useState("");
+  const [drugSuggestions, setDrugSuggestions] = useState<string[]>([]);
+  const [drugSearchLoading, setDrugSearchLoading] = useState(false);
+  const [showDrugSuggestions, setShowDrugSuggestions] = useState(false);
   const [strength, setStrength] = useState("");
   const [form, setForm] = useState("");
   const [status, setStatus] = useState<Status>("available");
@@ -76,6 +79,39 @@ export default function InventoryDashboard() {
   useEffect(() => {
     loadInventory();
   }, []);
+
+  useEffect(() => {
+    const query = name.trim();
+
+    if (query.length < 2) {
+      setDrugSuggestions([]);
+      setShowDrugSuggestions(false);
+      return;
+    }
+
+    const timer = window.setTimeout(async () => {
+      setDrugSearchLoading(true);
+
+      try {
+        const response = await fetch(
+          `/api/drugs?q=${encodeURIComponent(query)}`
+        );
+
+        const data = await response.json();
+
+        setDrugSuggestions(
+          Array.isArray(data.suggestions) ? data.suggestions : []
+        );
+        setShowDrugSuggestions(true);
+      } catch {
+        setDrugSuggestions([]);
+      } finally {
+        setDrugSearchLoading(false);
+      }
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [name]);
 
   async function addMedication(e: FormEvent) {
     e.preventDefault();
@@ -327,13 +363,66 @@ export default function InventoryDashboard() {
                   Medication
                 </label>
 
-                <input
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Medication name"
-                  className="w-full rounded-2xl border border-black/15 bg-white px-4 py-3 text-[#303030] outline-none transition focus:border-[#ed1c2e] focus:ring-4 focus:ring-[#ed1c2e]/10"
-                />
+                <div className="relative">
+                  <input
+                    required
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      setShowDrugSuggestions(true);
+                    }}
+                    onFocus={() => {
+                      if (drugSuggestions.length > 0) {
+                        setShowDrugSuggestions(true);
+                      }
+                    }}
+                    placeholder="Start typing a drug name..."
+                    autoComplete="off"
+                    className="w-full rounded-2xl border border-black/15 bg-white px-4 py-3 pr-12 text-[#303030] outline-none transition focus:border-[#ed1c2e] focus:ring-4 focus:ring-[#ed1c2e]/10"
+                  />
+
+                  {drugSearchLoading && (
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#777]">
+                      ...
+                    </span>
+                  )}
+
+                  {showDrugSuggestions &&
+                    name.trim().length >= 2 &&
+                    !drugSearchLoading && (
+                      <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-xl">
+                        {drugSuggestions.length > 0 ? (
+                          <>
+                            <div className="border-b border-black/5 bg-[#f5f5f5] px-4 py-2">
+                              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#777]">
+                                Drug Suggestions
+                              </p>
+                            </div>
+
+                            {drugSuggestions.map((drug) => (
+                              <button
+                                key={drug}
+                                type="button"
+                                onClick={() => {
+                                  setName(drug);
+                                  setShowDrugSuggestions(false);
+                                }}
+                                className="block w-full border-b border-black/5 px-4 py-3 text-left text-sm font-bold text-[#303030] transition last:border-b-0 hover:bg-[#f5f5f5]"
+                              >
+                                {drug}
+                              </button>
+                            ))}
+                          </>
+                        ) : (
+                          <div className="px-4 py-3">
+                            <p className="text-sm text-[#666]">
+                              No drug suggestions found. You can still enter the medication manually.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
