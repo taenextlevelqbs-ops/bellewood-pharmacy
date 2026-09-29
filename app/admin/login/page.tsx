@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f5f5f5] px-6">
+    <main className="flex min-h-screen items-center justify-center bg-white px-6">
       <div className="w-full max-w-md rounded-[32px] bg-white p-8 shadow-xl md:p-10">
 
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ed1c2e] text-xl font-black text-white">
@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
 
         <a
           href="/"
-          className="mt-7 block text-center text-sm font-bold text-gray-400"
+          className="mt-7 block text-center text-sm font-bold text-[#555]"
         >
           ← Back to Bellewood Pharmacy
         </a>
