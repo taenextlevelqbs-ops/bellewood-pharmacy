@@ -690,7 +690,7 @@ export default function Home() {
               {
                 title: "Compounding Services",
                 text: "Ask our pharmacy team about customized medication options and available compounding services.",
-                href: "tel:5714101556",
+                href: "/compounding",
                 button: "Inquire for More Details",
               },
             ].map((item) => (
@@ -1239,7 +1239,7 @@ export default function Home() {
             <div className="mt-4 space-y-2 text-sm text-white/50">
 
               <p>
-                <a href="/prescriptions">Manage Prescriptions</a>
+                <a href="/prescriptions">Refill Prescription</a>
               </p>
 
               <p>
@@ -1259,7 +1259,15 @@ export default function Home() {
               </p>
 
               <p>
-                <a href="#wellness">Wellness</a>
+                <a href="/compounding">Compounding</a>
+              </p>
+
+              <p>
+                <a href="/providers">For Providers</a>
+              </p>
+
+              <p>
+                <a href="/wellness">Wellness</a>
               </p>
 
             </div>
@@ -1287,7 +1295,16 @@ export default function Home() {
         </div>
 
         <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/35">
-          © 2026 Bellewood Pharmacy. All rights reserved.
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <span>© 2026 Bellewood Pharmacy. All rights reserved.</span>
+
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <a href="/privacy" className="transition hover:text-white">Privacy</a>
+              <a href="/hipaa" className="transition hover:text-white">Health Privacy</a>
+              <a href="/accessibility" className="transition hover:text-white">Accessibility</a>
+              <a href="/terms" className="transition hover:text-white">Terms</a>
+            </div>
+          </div>
         </div>
 
       </footer>

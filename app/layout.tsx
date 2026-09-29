@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://bellewoodpharmacy.com"),
   title: {
     default: "Bellewood Pharmacy | Leesburg, VA",
     template: "%s | Bellewood Pharmacy",
@@ -30,6 +31,17 @@ export const metadata: Metadata = {
     "compounding pharmacy Leesburg",
     "local pharmacy Leesburg",
   ],
+  openGraph: {
+    title: "Bellewood Pharmacy | Leesburg, VA",
+    description:
+      "Personalized prescription services, vaccines, wellness support, transfers, and local pharmacy care in Leesburg, Virginia.",
+    type: "website",
+    locale: "en_US",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
