@@ -621,14 +621,22 @@ export default function Home() {
               </p>
 
               <h3 className="mt-4 text-4xl font-black tracking-tight">
-                Have questions about your coverage?
+                We accept all insurance plans.
               </h3>
 
               <p className="mt-5 max-w-xl leading-8 text-gray-600">
-                Bring your insurance information to Bellewood Pharmacy and the
-                pharmacy team can help answer questions about prescription
-                coverage and pricing.
+                Bellewood Pharmacy works with all insurance plans to make
+                filling your prescriptions simple and convenient. Bring your
+                insurance information with you and our pharmacy team can help
+                with coverage, pricing, and prescription questions.
               </p>
+
+              <a
+                href="/insurance"
+                className="mt-7 inline-flex rounded-full bg-[#ed1c2e] px-6 py-3.5 text-sm font-black text-white transition hover:bg-[#d71929]"
+              >
+                Insurance Information →
+              </a>
 
             </div>
 
