@@ -38,6 +38,27 @@ export const metadata: Metadata = {
       "Personalized prescription services, vaccines, wellness support, transfers, and local pharmacy care in Leesburg, Virginia.",
     type: "website",
     locale: "en_US",
+    url: "https://bellewoodpharmacy.com",
+    siteName: "Bellewood Pharmacy",
+    images: [
+      {
+        url: "/comanylogo.png",
+        width: 1200,
+        height: 630,
+        alt: "Bellewood Pharmacy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bellewood Pharmacy | Leesburg, VA",
+    description:
+      "Personalized prescription services, vaccines, wellness support, transfers, and local pharmacy care in Leesburg, Virginia.",
+    images: ["/comanylogo.png"],
+  },
+  icons: {
+    icon: "/comanylogo.png",
+    apple: "/comanylogo.png",
   },
   robots: {
     index: true,
