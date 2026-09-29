@@ -1,3 +1,5 @@
+import MobileNav from "@/components/MobileNav";
+
 export default function Home() {
   const quickActions = [
     {
@@ -138,6 +140,8 @@ export default function Home() {
             </a>
           </div>
         </div>
+
+        <MobileNav />
       </nav>
 
       {/* HERO */}
