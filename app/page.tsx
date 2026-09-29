@@ -112,6 +112,10 @@ export default function Home() {
               Wellness
             </a>
 
+            <a href="/pharmacist" className="hover:text-[#ed1c2e]">
+              Meet the Pharmacist
+            </a>
+
             <a href="/careers" className="hover:text-[#ed1c2e]">
               Careers
             </a>
