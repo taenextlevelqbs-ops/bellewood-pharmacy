@@ -377,7 +377,13 @@ export default function InventoryDashboard() {
                       }
                     }}
                     placeholder="Start typing a drug name..."
-                    autoComplete="off"
+                    type="search"
+                    name="medication-search"
+                    autoComplete="new-password"
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                    data-form-type="other"
                     className="w-full rounded-2xl border border-black/15 bg-white px-4 py-3 pr-12 text-[#303030] outline-none transition focus:border-[#ed1c2e] focus:ring-4 focus:ring-[#ed1c2e]/10"
                   />
 
