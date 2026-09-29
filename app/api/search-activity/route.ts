@@ -3,10 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Supabase environment variables are missing");
+    throw new Error("Supabase URL or service role key is missing");
   }
 
   return createClient(url, key, {
