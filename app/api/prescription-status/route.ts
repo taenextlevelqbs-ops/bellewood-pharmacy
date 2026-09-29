@@ -68,11 +68,11 @@ export async function POST(request: NextRequest) {
     const normalizedLastName = lastName.toLowerCase();
 
     const match = (data || []).find((row) => {
-      const name = String(row.patient_name || "")
+      const fullName = String(row.patient_name || "")
         .trim()
         .toLowerCase();
 
-      const parts = name.split(/\s+/);
+      const parts = fullName.split(/\s+/);
       const storedLastName = parts[parts.length - 1] || "";
 
       return storedLastName === normalizedLastName;

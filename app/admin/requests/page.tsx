@@ -11,7 +11,13 @@ type RequestType =
   | "vaccine"
   | "appointment";
 
-type RequestStatus = "new" | "in_progress" | "completed";
+type RequestStatus =
+  | "new"
+  | "in_progress"
+  | "completed"
+  | "getting_ready"
+  | "ready_for_pickup"
+  | "picked_up";
 type Priority = "normal" | "priority";
 
 type PharmacyRequest = {
@@ -42,9 +48,12 @@ const typeLabels: Record<RequestType, string> = {
 };
 
 const statusLabels: Record<RequestStatus, string> = {
-  new: "New",
+  new: "Received",
   in_progress: "In Progress",
   completed: "Completed",
+  getting_ready: "Getting Ready",
+  ready_for_pickup: "Ready for Pickup",
+  picked_up: "Picked Up",
 };
 
 export default function RequestsPage() {
@@ -139,7 +148,9 @@ export default function RequestsPage() {
       total: requests.length,
       new: requests.filter((r) => r.status === "new").length,
       progress: requests.filter((r) => r.status === "in_progress").length,
-      completed: requests.filter((r) => r.status === "completed").length,
+      completed: requests.filter(
+        (r) => r.status === "completed" || r.status === "picked_up"
+      ).length,
     }),
     [requests]
   );
@@ -383,9 +394,20 @@ export default function RequestsPage() {
                         }
                         className="rounded-xl border border-black/15 bg-white px-4 py-3 font-bold"
                       >
-                        <option value="new">New</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed</option>
+                        {request.request_type === "prescription" ? (
+                          <>
+                            <option value="new">Received</option>
+                            <option value="getting_ready">Getting Ready</option>
+                            <option value="ready_for_pickup">Ready for Pickup</option>
+                            <option value="picked_up">Picked Up</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="new">New</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                          </>
+                        )}
                       </select>
 
                       <button

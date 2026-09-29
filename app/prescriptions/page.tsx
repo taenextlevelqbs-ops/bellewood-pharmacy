@@ -2,7 +2,13 @@
 
 import { FormEvent, useState } from "react";
 
-type PrescriptionStatus = "new" | "in_progress" | "completed";
+type PrescriptionStatus =
+  | "new"
+  | "getting_ready"
+  | "ready_for_pickup"
+  | "picked_up"
+  | "in_progress"
+  | "completed";
 
 type StatusResult = {
   reference: string;
@@ -21,17 +27,37 @@ const statusInfo: Record<
   new: {
     label: "Received",
     description:
-      "Bellewood Pharmacy has received your request and it is waiting for review.",
+      "Bellewood Pharmacy has received your prescription request.",
   },
-  in_progress: {
-    label: "In Progress",
+
+  getting_ready: {
+    label: "Getting Ready",
     description:
-      "The pharmacy team is currently reviewing or processing your request.",
+      "Your prescription is currently being prepared by Bellewood Pharmacy.",
   },
+
+  ready_for_pickup: {
+    label: "Ready for Pickup",
+    description:
+      "Your prescription is ready for pickup at Bellewood Pharmacy.",
+  },
+
+  picked_up: {
+    label: "Picked Up",
+    description:
+      "This prescription has been marked as picked up.",
+  },
+
+  in_progress: {
+    label: "Getting Ready",
+    description:
+      "Your prescription is currently being prepared by Bellewood Pharmacy.",
+  },
+
   completed: {
     label: "Completed",
     description:
-      "The pharmacy team has completed this request. Contact Bellewood if you need additional information.",
+      "This prescription request has been completed.",
   },
 };
 
@@ -40,11 +66,15 @@ export default function PrescriptionsPage() {
   const [rxNumber, setRxNumber] = useState("");
 
   const [checking, setChecking] = useState(false);
-  const [result, setResult] = useState<StatusResult | null>(null);
+  const [result, setResult] =
+    useState<StatusResult | null>(null);
+
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState("");
 
-  async function checkStatus(e: FormEvent<HTMLFormElement>) {
+  async function checkStatus(
+    e: FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
 
     setChecking(true);
@@ -53,22 +83,26 @@ export default function PrescriptionsPage() {
     setError("");
 
     try {
-      const response = await fetch("/api/prescription-status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          lastName,
-          rxNumber,
-        }),
-      });
+      const response = await fetch(
+        "/api/prescription-status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lastName,
+            rxNumber,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok || !data.ok) {
         throw new Error(
-          data.error || "Unable to check prescription status."
+          data.error ||
+            "Unable to check prescription status."
         );
       }
 
@@ -93,7 +127,10 @@ export default function PrescriptionsPage() {
     <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
       <nav className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-3">
+          <a
+            href="/"
+            className="flex items-center gap-3"
+          >
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
               Rx
             </div>
@@ -129,8 +166,9 @@ export default function PrescriptionsPage() {
           </h2>
 
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">
-            Enter the last name and prescription number associated
-            with your request to view its current status.
+            Enter your last name and prescription
+            number to see the latest status from
+            Bellewood Pharmacy.
           </p>
 
           <form
@@ -193,7 +231,10 @@ export default function PrescriptionsPage() {
                   </h3>
 
                   <p className="mt-3 text-sm leading-6 text-green-800">
-                    {statusInfo[result.status]?.description}
+                    {
+                      statusInfo[result.status]
+                        ?.description
+                    }
                   </p>
 
                   <div className="mt-5 border-t border-green-200 pt-4">
@@ -222,10 +263,10 @@ export default function PrescriptionsPage() {
                   </p>
 
                   <p className="mt-2 text-sm leading-6 text-[#666]">
-                    We could not find a prescription request
-                    matching that last name and prescription
-                    number. Check the information and try again,
-                    or contact Bellewood Pharmacy.
+                    We couldn't find a prescription
+                    matching that last name and
+                    prescription number. Check the
+                    information and try again.
                   </p>
                 </div>
               )}
