@@ -831,6 +831,113 @@ export default function Home() {
         </div>
       </section>
 
+      {/* MEET YOUR PHARMACIST */}
+      <section id="pharmacist" className="bg-[#f8f8f8]">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+
+            <div className="relative">
+              <div className="overflow-hidden rounded-[34px] bg-white shadow-xl">
+                <img
+                  src="/pharmacist.jpg"
+                  alt="Ak Brahmbhatt, PharmD, pharmacist at Bellewood Pharmacy"
+                  className="h-[520px] w-full object-cover object-top"
+                />
+              </div>
+
+              <div className="absolute -bottom-5 -right-3 rounded-[24px] bg-[#ed1c2e] px-6 py-5 text-white shadow-xl md:right-[-20px]">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">
+                  Community Pharmacy
+                </p>
+                <p className="mt-1 text-lg font-black">
+                  10 Years of Experience
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
+                Meet Your Pharmacist
+              </p>
+
+              <h2 className="mt-4 text-4xl font-black tracking-tight text-[#303030] md:text-5xl">
+                Ak Brahmbhatt, PharmD
+              </h2>
+
+              <p className="mt-3 text-lg font-bold text-[#777]">
+                Pharmacist • Bellewood Pharmacy
+              </p>
+
+              <div className="mt-8 space-y-5 text-base leading-8 text-[#666]">
+                <p>
+                  Ak Brahmbhatt brings 10 years of community retail pharmacy
+                  experience to Bellewood Pharmacy, with a focus on
+                  personalized service and helping patients feel comfortable
+                  asking questions about their medications and care.
+                </p>
+
+                <p>
+                  He earned his Doctor of Pharmacy degree from Chicago State
+                  University and holds a Bachelor of Science in Nutrition from
+                  the University of Florida.
+                </p>
+
+                <p>
+                  At Bellewood, the goal is simple: combine professional
+                  pharmacy care with the personal attention and accessibility
+                  of a neighborhood pharmacy.
+                </p>
+              </div>
+
+              <div className="mt-9 flex flex-wrap gap-3">
+                <a
+                  href="tel:5714101556"
+                  className="rounded-full bg-[#ed1c2e] px-6 py-3.5 text-sm font-black text-white transition hover:bg-[#d71929]"
+                >
+                  Call Bellewood
+                </a>
+
+                <a
+                  href="https://www.instagram.com/bellewoodpharmacy/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-black/15 bg-white px-6 py-3.5 text-sm font-black text-[#303030] transition hover:border-[#ed1c2e] hover:text-[#ed1c2e]"
+                >
+                  Follow on Instagram ↗
+                </a>
+              </div>
+
+              <div className="mt-10 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[22px] bg-white p-5 shadow-sm">
+                  <p className="text-xs font-black uppercase tracking-[0.15em] text-[#999]">
+                    Education
+                  </p>
+                  <p className="mt-2 font-black text-[#303030]">
+                    Doctor of Pharmacy
+                  </p>
+                  <p className="mt-1 text-sm text-[#666]">
+                    Chicago State University
+                  </p>
+                </div>
+
+                <div className="rounded-[22px] bg-white p-5 shadow-sm">
+                  <p className="text-xs font-black uppercase tracking-[0.15em] text-[#999]">
+                    Background
+                  </p>
+                  <p className="mt-2 font-black text-[#303030]">
+                    B.S. Nutrition
+                  </p>
+                  <p className="mt-1 text-sm text-[#666]">
+                    University of Florida
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* COMMUNITY TRUST */}
       <section className="bg-[#f8f8f8]">
         <div className="mx-auto max-w-7xl px-6 py-24">
