@@ -3,43 +3,63 @@ import { NextRequest, NextResponse } from "next/server";
 type RxConcept = {
   rxcui?: string;
   name?: string;
+  synonym?: string;
+  tty?: string;
+  language?: string;
+  suppress?: string;
+  umlscui?: string;
+};
+
+type DrugResult = {
+  rxcui: string;
+  name: string;
+  synonym: string | null;
+  type: string | null;
 };
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("q")?.trim();
 
   if (!query || query.length < 2) {
-    return NextResponse.json({ suggestions: [] });
+    return NextResponse.json({
+      suggestions: [],
+      results: [],
+    });
   }
 
   try {
-    // RxNorm approximate drug-name search
-    const searchUrl =
-      "https://rxnav.nlm.nih.gov/REST/rxcui.json?name=" +
+    const approximateUrl =
+      "https://rxnav.nlm.nih.gov/REST/approximateTerm.json?term=" +
       encodeURIComponent(query) +
-      "&search=9";
+      "&maxEntries=15&option=1";
 
-    const searchResponse = await fetch(searchUrl, {
+    const approximateResponse = await fetch(approximateUrl, {
       headers: { Accept: "application/json" },
       cache: "no-store",
     });
 
-    if (!searchResponse.ok) {
-      return NextResponse.json({ suggestions: [] });
+    if (!approximateResponse.ok) {
+      return NextResponse.json({
+        suggestions: [],
+        results: [],
+      });
     }
 
-    const searchData = await searchResponse.json();
+    const approximateData = await approximateResponse.json();
 
-    const ids: string[] =
-      searchData?.idGroup?.rxnormId?.slice(0, 10) ?? [];
+    const candidates: Array<{ rxcui?: string }> =
+      approximateData?.approximateGroup?.candidate ?? [];
 
-    if (ids.length === 0) {
-      return NextResponse.json({ suggestions: [] });
-    }
+    const ids = Array.from(
+      new Set(
+        candidates
+          .map((candidate) => candidate.rxcui)
+          .filter((id): id is string => Boolean(id))
+      )
+    ).slice(0, 12);
 
-    // Convert RxNorm IDs into actual medication names
-    const names = await Promise.all(
-      ids.map(async (id) => {
+    const concepts = await Promise.all(
+      ids.map(async (id): Promise<DrugResult | null> => {
         try {
           const response = await fetch(
             `https://rxnav.nlm.nih.gov/REST/rxcui/${encodeURIComponent(
@@ -54,33 +74,46 @@ export async function GET(request: NextRequest) {
           if (!response.ok) return null;
 
           const data = await response.json();
+          const properties: RxConcept | undefined = data?.properties;
 
-          const concept: RxConcept | undefined =
-            data?.properties;
+          if (!properties?.name) return null;
 
-          return concept?.name?.trim() || null;
+          return {
+            rxcui: id,
+            name: properties.name.trim(),
+            synonym: properties.synonym?.trim() || null,
+            type: properties.tty || null,
+          };
         } catch {
           return null;
         }
       })
     );
 
-    const suggestions = Array.from(
-      new Set(
-        names.filter(
-          (name): name is string =>
-            typeof name === "string" && name.length > 0
-        )
-      )
-    ).slice(0, 8);
+    const unique = new Map<string, DrugResult>();
 
-    return NextResponse.json({ suggestions });
+    for (const concept of concepts) {
+      if (!concept) continue;
+
+      const key = concept.name.toLowerCase();
+
+      if (!unique.has(key)) {
+        unique.set(key, concept);
+      }
+    }
+
+    const results = Array.from(unique.values()).slice(0, 10);
+
+    return NextResponse.json({
+      suggestions: results.map((result) => result.name),
+      results,
+    });
   } catch (error) {
     console.error("RxNorm search error:", error);
 
-    return NextResponse.json(
-      { suggestions: [] },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      suggestions: [],
+      results: [],
+    });
   }
 }

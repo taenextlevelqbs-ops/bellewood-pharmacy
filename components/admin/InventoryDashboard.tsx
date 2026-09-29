@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import AdminNav from "@/components/admin/AdminNav";
 
 type Status =
   | "available"
@@ -263,6 +264,8 @@ export default function InventoryDashboard() {
         </div>
       </header>
 
+      <AdminNav />
+
       <div className="mx-auto max-w-7xl px-6 py-8">
         <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           <button
@@ -338,7 +341,7 @@ export default function InventoryDashboard() {
           </button>
         </section>
 
-        <div className="mt-7 grid gap-7 lg:grid-cols-[380px_1fr]">
+        <div id="medications" className="mt-7 grid gap-7 lg:grid-cols-[380px_1fr]">
           <section className="h-fit rounded-[30px] border border-black/10 bg-white p-7 shadow-sm">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ed1c2e] text-2xl font-black text-white">
               +

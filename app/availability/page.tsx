@@ -31,6 +31,33 @@ const statusInfo = {
   },
 };
 
+
+async function logMedicationSearch(
+  searchTerm: string,
+  matched: boolean,
+  resultCount: number
+) {
+  const term = searchTerm.trim();
+
+  if (term.length < 2) return;
+
+  try {
+    await fetch("/api/search-activity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        searchTerm: term,
+        matched,
+        resultCount,
+      }),
+    });
+  } catch {
+    // Analytics must never block the patient-facing search experience.
+  }
+}
+
 export default function AvailabilityPage() {
   const supabase = useMemo(() => createClient(), []);
 
