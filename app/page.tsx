@@ -190,6 +190,12 @@ export default function Home() {
               <span>Local Care</span>
               <span>Se Habla Español</span>
               <span>Leesburg, VA</span>
+              <a
+                href="/insurance"
+                className="font-black text-[#ed1c2e] transition hover:text-[#cf1727]"
+              >
+                ✓ All Insurance Accepted
+              </a>
             </div>
           </div>
 
