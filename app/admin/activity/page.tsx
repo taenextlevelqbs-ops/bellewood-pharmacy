@@ -22,7 +22,7 @@ export default function SearchActivityPage() {
   const [filter, setFilter] = useState("");
   const [range, setRange] = useState<"today" | "week" | "all">("week");
 
-  async function load() {
+  async function load(silent = false) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -53,7 +53,7 @@ export default function SearchActivityPage() {
     const { data } = await query;
 
     setRows((data as SearchRow[]) || []);
-    setLoading(false);
+    if (!silent) setLoading(false);
   }
 
   useEffect(() => {
@@ -87,6 +87,20 @@ export default function SearchActivityPage() {
       popular,
     };
   }, [rows]);
+
+
+  // BELLEWOOD_LIVE_SEARCH_ACTIVITY
+  // Keep the dashboard current while staff have this page open.
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      void load(true);
+    }, 3000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [range]);
+
 
   return (
     <main className="min-h-screen bg-[#d9d9d9] text-[#303030]">
@@ -127,7 +141,12 @@ export default function SearchActivityPage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 rounded-full bg-green-50 px-3 py-2 text-xs font-black text-green-700">
+                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                  LIVE
+                </div>
+
                 <select
                   value={range}
                   onChange={(e) =>
@@ -141,7 +160,7 @@ export default function SearchActivityPage() {
                 </select>
 
                 <button
-                  onClick={load}
+                  onClick={() => void load()}
                   className="rounded-full bg-[#303030] px-4 py-2 text-sm font-bold text-white"
                 >
                   Refresh
