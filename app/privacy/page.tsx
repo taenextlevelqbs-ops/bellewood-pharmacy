@@ -1,12 +1,18 @@
+import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
+
 export const metadata = {
   title: "Privacy",
 };
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-[#333333]">
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f8f8f8] text-[#333333]">
+
       <div className="mx-auto max-w-4xl px-6 py-20">
-        <a href="/" className="font-bold text-[#ed1c2e]">← Bellewood Pharmacy</a>
+        <Link href="/" className="font-bold text-[#ed1c2e]">← Bellewood Pharmacy</Link>
 
         <h1 className="mt-10 text-5xl font-black">Privacy</h1>
 
@@ -38,11 +44,12 @@ export default function PrivacyPage() {
           </section>
 
           <p className="text-sm text-gray-400">
-            This website privacy information does not replace Bellewood Pharmacy's
+            This website privacy information does not replace Bellewood Pharmacy&apos;s
             official Notice of Privacy Practices.
           </p>
         </div>
       </div>
     </main>
+    </>
   );
 }

@@ -91,7 +91,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white px-4 py-16 text-[#303030]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-white px-4 py-16 text-[#303030]">
       <div className="mx-auto max-w-md">
         <div className="mb-8 text-center">
           <div className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#ed1c2e]">

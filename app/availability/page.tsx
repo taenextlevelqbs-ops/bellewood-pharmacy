@@ -1,5 +1,7 @@
 "use client";
 
+import SiteHeader from "@/components/SiteHeader";
+
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -213,21 +215,9 @@ export default function AvailabilityPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-[#333333]">
-      <header className="border-b border-gray-100 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <a href="/" className="text-xl font-black">
-            Bellewood <span className="text-[#ed1c2e]">Pharmacy</span>
-          </a>
-
-          <a
-            href="/"
-            className="text-sm font-bold text-gray-500 transition hover:text-[#ed1c2e]"
-          >
-            Back to Home
-          </a>
-        </div>
-      </header>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f8f8f8] text-[#333333]">
 
       <section className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="text-center">
@@ -240,7 +230,7 @@ export default function AvailabilityPage() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-500">
-            Search Bellewood's current medication availability before your
+            Search Bellewood&apos;s current medication availability before your
             visit.
           </p>
         </div>
@@ -268,6 +258,7 @@ export default function AvailabilityPage() {
                 }
               }}
               placeholder="Start typing a medication..."
+              aria-label="Search medication availability"
               className="min-w-0 flex-1 bg-white px-5 py-5 text-base text-[#333] outline-none"
             />
 
@@ -317,7 +308,7 @@ export default function AvailabilityPage() {
               ) : (
                 <div className="px-5 py-4 text-sm text-gray-500">
                   No medication suggestions found. You can still search
-                  Bellewood's inventory.
+                  Bellewood&apos;s inventory.
                 </div>
               )}
             </div>
@@ -355,7 +346,7 @@ export default function AvailabilityPage() {
 
                 <p className="mx-auto mt-3 max-w-xl leading-7 text-gray-500">
                   We recognize the medication you searched for, but it is not
-                  currently listed in Bellewood's public inventory. This does
+                  currently listed in Bellewood&apos;s public inventory. This does
                   not necessarily mean Bellewood cannot provide it.
                 </p>
 
@@ -432,5 +423,6 @@ export default function AvailabilityPage() {
         )}
       </section>
     </main>
+    </>
   );
 }

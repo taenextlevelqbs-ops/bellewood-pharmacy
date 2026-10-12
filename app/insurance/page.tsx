@@ -1,21 +1,10 @@
+import SiteHeader from "@/components/SiteHeader";
+
 export default function InsurancePage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-[#333333]">
-
-      <header className="border-b border-gray-100 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <a href="/" className="text-xl font-black">
-            Bellewood <span className="text-[#ed1c2e]">Pharmacy</span>
-          </a>
-
-          <a
-            href="/"
-            className="text-sm font-bold text-gray-500 transition hover:text-[#ed1c2e]"
-          >
-            Back to Home
-          </a>
-        </div>
-      </header>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f8f8f8] text-[#333333]">
 
       <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
 
@@ -107,5 +96,6 @@ export default function InsurancePage() {
 
       </section>
     </main>
+    </>
   );
 }

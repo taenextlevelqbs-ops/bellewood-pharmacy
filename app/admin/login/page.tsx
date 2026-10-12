@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12 text-[#303030]">
+    <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-white px-6 py-12 text-[#303030]">
       <div className="w-full max-w-md rounded-[32px] border border-black/10 bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.12)] md:p-10">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ed1c2e] text-xl font-black text-white">
           B

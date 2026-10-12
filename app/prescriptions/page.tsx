@@ -1,5 +1,7 @@
 "use client";
 
+import SiteHeader from "@/components/SiteHeader";
+
 import { FormEvent, useState } from "react";
 
 type PrescriptionStatus =
@@ -124,36 +126,9 @@ export default function PrescriptionsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
-      <nav className="border-b border-gray-100 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a
-            href="/"
-            className="flex items-center gap-3"
-          >
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
-              Rx
-            </div>
-
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-gray-400">
-                BELLEWOOD
-              </p>
-
-              <h1 className="text-xl font-black">
-                PHARMACY
-              </h1>
-            </div>
-          </a>
-
-          <a
-            href="/"
-            className="rounded-full border border-gray-200 px-5 py-3 text-sm font-bold"
-          >
-            Back Home
-          </a>
-        </div>
-      </nav>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f7f7f7] text-[#333333]">
 
       <section className="mx-auto max-w-5xl px-6 py-20">
         <div className="rounded-[34px] bg-[#303030] p-8 md:p-12">
@@ -263,7 +238,7 @@ export default function PrescriptionsPage() {
                   </p>
 
                   <p className="mt-2 text-sm leading-6 text-[#666]">
-                    We couldn't find a prescription
+                    We couldn&apos;t find a prescription
                     matching that last name and
                     prescription number. Check the
                     information and try again.
@@ -281,5 +256,6 @@ export default function PrescriptionsPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

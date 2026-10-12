@@ -1,12 +1,18 @@
+import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
+
 export const metadata = {
   title: "Health Information Privacy",
 };
 
 export default function HipaaPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f8] text-[#333333]">
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f8f8f8] text-[#333333]">
+
       <div className="mx-auto max-w-4xl px-6 py-20">
-        <a href="/" className="font-bold text-[#ed1c2e]">← Bellewood Pharmacy</a>
+        <Link href="/" className="font-bold text-[#ed1c2e]">← Bellewood Pharmacy</Link>
 
         <p className="mt-10 text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
           Patient Privacy
@@ -22,7 +28,7 @@ export default function HipaaPage() {
           </h2>
 
           <p className="mt-5 leading-8 text-gray-600">
-            Bellewood Pharmacy's official Notice of Privacy Practices should
+            Bellewood Pharmacy&apos;s official Notice of Privacy Practices should
             describe how protected health information may be used and disclosed
             and how patients can access their privacy rights.
           </p>
@@ -30,7 +36,7 @@ export default function HipaaPage() {
           <div className="mt-8 rounded-[24px] bg-[#f8f8f8] p-6">
             <p className="font-black">Need privacy information?</p>
             <p className="mt-2 leading-7 text-gray-500">
-              Contact Bellewood Pharmacy directly to request the pharmacy's
+              Contact Bellewood Pharmacy directly to request the pharmacy&apos;s
               current official Notice of Privacy Practices.
             </p>
 
@@ -44,5 +50,6 @@ export default function HipaaPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

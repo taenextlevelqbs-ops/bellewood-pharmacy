@@ -1,39 +1,23 @@
+import Image from "next/image";
+import SiteHeader from "@/components/SiteHeader";
+
 export default function PharmacistPage() {
   return (
-    <main className="min-h-screen bg-[#f7f7f7] text-[#303030]">
-      <nav className="border-b border-black/5 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
-              Rx
-            </div>
-
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-gray-400">
-                BELLEWOOD
-              </p>
-              <p className="text-xl font-black">PHARMACY</p>
-            </div>
-          </a>
-
-          <a
-            href="/"
-            className="rounded-full border border-black/10 px-5 py-3 text-sm font-bold transition hover:border-[#ed1c2e] hover:text-[#ed1c2e]"
-          >
-            Back Home
-          </a>
-        </div>
-      </nav>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f7f7f7] text-[#303030]">
 
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-24">
         <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
 
           <div className="relative">
-            <div className="overflow-hidden rounded-[36px] bg-white shadow-xl">
-              <img
+            <div className="relative h-[420px] overflow-hidden rounded-[36px] bg-white shadow-xl sm:h-[500px] lg:h-[540px]">
+              <Image
                 src="/owner.jpeg"
                 alt="Ak Brahmbhatt, PharmD"
-                className="h-[540px] w-full object-cover object-top"
+                fill
+                sizes="(max-width: 1024px) 100vw, 45vw"
+                className="object-cover object-top"
               />
             </div>
 
@@ -150,5 +134,6 @@ export default function PharmacistPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }
