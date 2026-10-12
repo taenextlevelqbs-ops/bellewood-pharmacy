@@ -103,7 +103,7 @@ export default function SearchActivityPage() {
 
 
   return (
-    <main className="min-h-screen bg-[#d9d9d9] text-[#303030]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#d9d9d9] text-[#303030]">
       <header className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-6">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">

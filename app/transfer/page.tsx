@@ -1,5 +1,7 @@
 "use client";
 
+import SiteHeader from "@/components/SiteHeader";
+
 import { FormEvent, useState } from "react";
 
 export default function TransferPage() {
@@ -64,30 +66,9 @@ export default function TransferPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
-      <nav className="border-b border-gray-100 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
-              Rx
-            </div>
-
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-gray-400">
-                BELLEWOOD
-              </p>
-              <h1 className="text-xl font-black">PHARMACY</h1>
-            </div>
-          </a>
-
-          <a
-            href="/"
-            className="rounded-full border border-gray-200 px-5 py-3 text-sm font-bold"
-          >
-            Back Home
-          </a>
-        </div>
-      </nav>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f7f7f7] text-[#333333]">
 
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-12 lg:grid-cols-2">
@@ -137,6 +118,7 @@ export default function TransferPage() {
                 value={form.patientName}
                 onChange={(e) => update("patientName", e.target.value)}
                 placeholder="Your full name"
+                aria-label="Your full name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
@@ -146,6 +128,7 @@ export default function TransferPage() {
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
                 placeholder="Phone number"
+                aria-label="Phone number"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
@@ -154,6 +137,7 @@ export default function TransferPage() {
                 value={form.currentPharmacy}
                 onChange={(e) => update("currentPharmacy", e.target.value)}
                 placeholder="Current pharmacy"
+                aria-label="Current pharmacy"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
@@ -164,6 +148,7 @@ export default function TransferPage() {
                   update("currentPharmacyPhone", e.target.value)
                 }
                 placeholder="Current pharmacy phone"
+                aria-label="Current pharmacy phone"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
@@ -172,6 +157,7 @@ export default function TransferPage() {
                 value={form.medicationName}
                 onChange={(e) => update("medicationName", e.target.value)}
                 placeholder="Medication name"
+                aria-label="Medication name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
@@ -179,6 +165,7 @@ export default function TransferPage() {
                 value={form.notes}
                 onChange={(e) => update("notes", e.target.value)}
                 placeholder="Additional notes"
+                aria-label="Additional notes"
                 rows={4}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
@@ -209,5 +196,6 @@ export default function TransferPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

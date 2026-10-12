@@ -1,4 +1,5 @@
-import MobileNav from "@/components/MobileNav";
+import Image from "next/image";
+import SiteHeader from "@/components/SiteHeader";
 
 export default function Home() {
   const quickActions = [
@@ -63,236 +64,83 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-white text-[#333333]">
-
-      {/* TOP BAR */}
-      <div className="bg-[#ed1c2e] px-6 py-2 text-center text-sm font-semibold text-white">
-        Se Habla Español • Serving Leesburg, Virginia
-      </div>
-
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-
-          <a href="/" className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center overflow-hidden">
-              <img
-                src="/comanylogo.png"
-                alt="Bellewood Pharmacy logo"
-                className="h-full w-full object-contain"
-              />
-            </div>
-
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-gray-400">
-                BELLEWOOD
-              </p>
-              <h1 className="text-xl font-black tracking-tight text-[#333333]">
-                PHARMACY
-              </h1>
-            </div>
-          </a>
-
-          <div className="hidden items-center gap-6 text-sm font-semibold xl:flex">
-            <a href="/" className="hover:text-[#ed1c2e]">
-              Home
-            </a>
-
-            <a href="#services" className="hover:text-[#ed1c2e]">
-              Pharmacy
-            </a>
-
-            <a href="/prescriptions" className="hover:text-[#ed1c2e]">
-              Prescriptions
-            </a>
-
-            <a href="/transfer" className="hover:text-[#ed1c2e]">
-              Transfer
-            </a>
-
-            <a href="/vaccines" className="hover:text-[#ed1c2e]">
-              Vaccines
-            </a>
-
-            <a href="#wellness" className="hover:text-[#ed1c2e]">
-              Wellness
-            </a>
-
-            <a href="/pharmacist" className="hover:text-[#ed1c2e]">
-              Meet the Pharmacist
-            </a>
-
-            <a href="/careers" className="hover:text-[#ed1c2e]">
-              Careers
-            </a>
-
-            <a href="#faq" className="hover:text-[#ed1c2e]">
-              FAQ
-            </a>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button className="hidden rounded-full border border-gray-200 px-4 py-2 text-xs font-bold text-gray-600 md:block">
-              Español
-            </button>
-
-            <a
-              href="tel:5714101556"
-              className="rounded-full bg-[#ed1c2e] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#cf1727]"
-            >
-              Call Us
-            </a>
-          </div>
-        </div>
-
-        <MobileNav />
-      </nav>
+    <>
+      <SiteHeader announcement />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-white text-[#333333]">
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#f7f7f7]">
-        <div className="absolute right-[-130px] top-[-120px] h-[420px] w-[420px] rounded-full bg-[#ed1c2e]/10" />
-        <div className="absolute bottom-[-170px] left-[-170px] h-[400px] w-[400px] rounded-full bg-gray-200/50" />
-
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-24">
-
-          <div>
-            <p className="mb-5 text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              Your Local Wellness Pharmacy
+      <section className="hero-shell relative overflow-hidden">
+        <div className="hero-grain pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="relative mx-auto grid max-w-[1440px] items-center gap-10 px-4 py-9 sm:px-6 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
+          <div className="relative z-10 max-w-2xl py-2 lg:py-8">
+            <p className="mb-5 inline-flex items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-[#8f1b27] sm:text-sm">
+              <span aria-hidden="true" className="h-px w-8 bg-[#c71d2c]" />
+              Your local wellness pharmacy
             </p>
 
-            <h2 className="max-w-3xl text-5xl font-black leading-[1.02] tracking-[-0.04em] text-[#303030] md:text-7xl">
+            <h1 className="max-w-3xl text-[clamp(3.2rem,8.4vw,6.8rem)] font-black leading-[0.93] tracking-[-0.065em] text-[#302b28]">
               Pharmacy care
-              <span className="block text-[#ed1c2e]">
+              <span className="hero-emphasis block font-serif font-normal italic tracking-[-0.055em] text-[#b51d2a]">
                 made personal.
               </span>
-            </h2>
+            </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
+            <p className="mt-7 max-w-xl text-base leading-7 text-[#655e58] sm:text-lg sm:leading-8">
               Prescriptions, supplements, testing, vaccines, wellness support,
               and personal service from a local pharmacy right here in Leesburg.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
-
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <a
                 href="/prescriptions"
-                className="rounded-full bg-[#ed1c2e] px-7 py-4 font-bold text-white shadow-lg shadow-red-100 transition hover:-translate-y-0.5 hover:bg-[#cf1727]"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#c71d2c] px-6 py-3.5 text-sm font-black text-white shadow-[0_12px_28px_rgba(160,23,35,0.2)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#a71623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c71d2c] focus-visible:ring-offset-2 sm:px-7 sm:text-base"
               >
-                Manage Prescriptions
+                Manage Prescriptions <span aria-hidden="true" className="ml-3">→</span>
               </a>
-
               <a
                 href="/transfer"
-                className="rounded-full border border-gray-300 bg-white px-7 py-4 font-bold text-[#333333] transition hover:border-[#ed1c2e] hover:text-[#ed1c2e]"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#c7bdb4] bg-white/70 px-6 py-3.5 text-sm font-black text-[#302b28] transition hover:border-[#c71d2c] hover:text-[#a71623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c71d2c] focus-visible:ring-offset-2 sm:px-7 sm:text-base"
               >
                 Transfer Prescriptions
               </a>
-
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-5 text-sm font-semibold text-gray-500">
-              <span>Local Care</span>
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-[#d8d0c6] pt-5 text-xs font-bold text-[#655e58] sm:mt-10 sm:gap-x-7 sm:text-sm">
+              <span className="inline-flex items-center gap-2"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#c71d2c]" />Leesburg, VA</span>
               <span>Se Habla Español</span>
-              <span>Leesburg, VA</span>
-              <a
-                href="/insurance"
-                className="font-black text-[#ed1c2e] transition hover:text-[#cf1727]"
-              >
-                ✓ All Insurance Accepted
+              <a href="/insurance" className="underline decoration-[#c71d2c]/40 underline-offset-4 transition hover:text-[#a71623] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c71d2c]">
+                Insurance information
               </a>
             </div>
           </div>
 
-          {/* SEARCH PANEL */}
-          <div className="rounded-[36px] bg-white p-8 shadow-2xl shadow-gray-300/50">
-
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
-              How can we help?
-            </p>
-
-            <h3 className="mt-3 text-3xl font-black">
-              Find pharmacy services fast.
-            </h3>
-
-            <div className="mt-7 flex overflow-hidden rounded-2xl border border-gray-200 bg-[#fafafa]">
-
-              <input
-                type="text"
-                placeholder="Search medications, vaccines, services..."
-                className="w-full bg-transparent px-5 py-4 text-sm outline-none"
+          <div className="hero-portrait relative mx-auto w-full max-w-[35rem] lg:ml-auto">
+            <div className="absolute -left-3 top-8 z-10 rounded-2xl border border-white/80 bg-[#fffefa] px-4 py-3 shadow-[0_14px_40px_rgba(40,28,24,0.14)] sm:-left-6 sm:px-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.17em] text-[#8c8178]">Your local pharmacist</p>
+              <p className="mt-1 text-sm font-black text-[#302b28] sm:text-base">Ak Brahmbhatt, PharmD</p>
+            </div>
+            <div className="relative aspect-[0.88] overflow-hidden rounded-[2rem] bg-[#d6ccc1] shadow-[0_28px_70px_rgba(47,36,30,0.2)] sm:aspect-[0.94] sm:rounded-[2.5rem]">
+              <Image
+                src="/owner.jpeg"
+                alt="Ak Brahmbhatt, PharmD, pharmacist at Bellewood Pharmacy"
+                fill
+                priority
+                sizes="(max-width: 1024px) 92vw, 43vw"
+                className="object-cover object-[50%_22%]"
               />
-
-              <button
-                type="button"
-                className="bg-[#ed1c2e] px-6 font-bold text-white"
-              >
-                Search
-              </button>
-
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-
-              <a
-                href="/prescriptions"
-                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50"
-              >
-                <p className="font-bold">Prescription Refills</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Manage your medication
-                </p>
-              </a>
-
-              <a
-                href="/vaccines"
-                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50"
-              >
-                <p className="font-bold">Vaccinations</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Schedule an appointment
-                </p>
-              </a>
-
-              <a
-                href="/transfer"
-                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50"
-              >
-                <p className="font-bold">Transfer Rx</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Switch to Bellewood
-                </p>
-              </a>
-
-              <a
-                href="#wellness"
-                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50"
-              >
-                <p className="font-bold">Wellness</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Supplements and support
-                </p>
-              </a>
-
-              <a
-                href="/availability"
-                className="rounded-2xl bg-[#f7f7f7] p-4 transition hover:bg-red-50 sm:col-span-2"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="font-bold">Check Medication Availability</p>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Looking for a medication? Check with Bellewood before your visit.
-                    </p>
-                  </div>
-
-                  <span className="text-xl font-black text-[#ed1c2e]">→</span>
+              <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 bg-[#241f1d]/90 px-5 py-5 text-white sm:px-7 sm:py-6">
+                <div>
+                  <span className="block text-[10px] font-black uppercase tracking-[0.18em] text-white/60">Independent pharmacy · Leesburg</span>
+                  <span className="mt-1 block text-lg font-black sm:text-xl">Care, close to home.</span>
                 </div>
-              </a>
-
+                <a href="tel:+15714101556" className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-4 text-sm font-black text-[#302b28] transition hover:bg-[#f1e8e0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#241f1d]">
+                  Call pharmacy
+                </a>
+              </div>
             </div>
           </div>
-
         </div>
+        <div className="hero-bottom-rule" aria-hidden="true" />
       </section>
 
       {/* QUICK ACTIONS */}
@@ -330,7 +178,7 @@ export default function Home() {
       </section>
 
       {/* RX STATUS */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
         <div className="grid gap-10 rounded-[38px] bg-[#303030] p-8 text-white md:p-12 lg:grid-cols-2">
 
@@ -392,7 +240,7 @@ export default function Home() {
       {/* SERVICES */}
       <section id="services" className="bg-[#f8f8f8]">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="max-w-3xl">
 
@@ -439,7 +287,7 @@ export default function Home() {
       </section>
 
       {/* TRANSFER FLOW */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
         <div className="grid gap-12 lg:grid-cols-2">
 
@@ -557,7 +405,7 @@ export default function Home() {
       {/* VACCINES */}
       <section className="bg-[#303030] text-white">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="grid gap-12 lg:grid-cols-2">
 
@@ -618,7 +466,7 @@ export default function Home() {
       </section>
 
       {/* INSURANCE */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
         <div className="rounded-[38px] bg-[#f7f7f7] p-8 md:p-12">
 
@@ -675,7 +523,7 @@ export default function Home() {
       {/* WELLNESS */}
       <section id="wellness" className="bg-[#f8f8f8]">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
@@ -758,7 +606,7 @@ export default function Home() {
 
       {/* ABOUT BELLEWOOD */}
       <section id="about" className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
 
@@ -859,27 +707,8 @@ export default function Home() {
 
       {/* MEET YOUR PHARMACIST */}
       <section id="pharmacist" className="bg-[#f8f8f8]">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-
-            <div className="relative">
-              <div className="overflow-hidden rounded-[34px] bg-white shadow-xl">
-                <img
-                  src="/owner.jpeg"
-                  alt="Ak Brahmbhatt, PharmD, pharmacist at Bellewood Pharmacy"
-                  className="h-[520px] w-full object-cover object-top"
-                />
-              </div>
-
-              <div className="absolute -bottom-5 -right-3 rounded-[24px] bg-[#ed1c2e] px-6 py-5 text-white shadow-xl md:right-[-20px]">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">
-                  Community Pharmacy
-                </p>
-                <p className="mt-1 text-lg font-black">
-                  10 Years of Experience
-                </p>
-              </div>
-            </div>
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-4xl">
 
             <div>
               <p className="text-xs font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
@@ -975,7 +804,7 @@ export default function Home() {
 
       {/* COMMUNITY TRUST */}
       <section className="bg-[#f8f8f8]">
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="text-center">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
@@ -1052,7 +881,7 @@ export default function Home() {
 
       {/* PHARMACY TEAM */}
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
 
             <div>
@@ -1112,7 +941,7 @@ export default function Home() {
 
       {/* PATIENT RESOURCES */}
       <section className="bg-[#f4f4f4]">
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="max-w-3xl">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ed1c2e]">
@@ -1189,7 +1018,7 @@ export default function Home() {
               </h4>
 
               <p className="mt-3 leading-7 text-gray-500">
-                Learn about Bellewood Pharmacy's commitment to accessible
+                Learn about Bellewood Pharmacy&apos;s commitment to accessible
                 website experiences.
               </p>
 
@@ -1224,7 +1053,7 @@ export default function Home() {
       {/* LOCAL CARE */}
       <section className="bg-white">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="grid gap-12 lg:grid-cols-2">
 
@@ -1282,7 +1111,7 @@ export default function Home() {
       {/* MAP */}
       <section id="location" className="bg-[#f7f7f7]">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="grid overflow-hidden rounded-[36px] bg-white shadow-lg lg:grid-cols-2">
 
@@ -1368,7 +1197,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="mx-auto max-w-4xl px-6 py-24">
+      <section id="faq" className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
         <div className="text-center">
 
@@ -1434,7 +1263,7 @@ export default function Home() {
       {/* CAREERS */}
       <section id="careers" className="bg-white">
 
-        <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
           <div className="relative overflow-hidden rounded-[38px] bg-[#303030] px-8 py-12 text-white md:px-14 md:py-16">
 
@@ -1526,6 +1355,7 @@ export default function Home() {
 
         </div>
       </section>
+      </main>
 
       {/* FOOTER */}
       <footer className="bg-[#262626] px-6 py-12 text-white">
@@ -1622,15 +1452,6 @@ export default function Home() {
         </div>
 
       </footer>
-
-      {/* MOBILE FLOATING CALL BUTTON */}
-      <a
-        href="tel:5714101556"
-        className="fixed bottom-5 right-5 z-50 rounded-full bg-[#ed1c2e] px-5 py-4 font-bold text-white shadow-2xl md:hidden"
-      >
-        Call Pharmacy
-      </a>
-
-    </main>
+    </>
   );
 }

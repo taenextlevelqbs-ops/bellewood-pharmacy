@@ -74,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <SupabaseRecoveryRedirect />
+        <a className="skip-link" href="#main-content">Skip to content</a>
         {children}
         <PharmacyAssistant />
       </body>

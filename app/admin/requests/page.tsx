@@ -211,7 +211,7 @@ export default function RequestsPage() {
   }, [requests, search, typeFilter, statusFilter]);
 
   return (
-    <main className="min-h-screen bg-[#d9d9d9] text-[#303030]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#d9d9d9] text-[#303030]">
       <header className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

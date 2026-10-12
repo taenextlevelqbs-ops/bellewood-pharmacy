@@ -1,32 +1,11 @@
+import SiteHeader from "@/components/SiteHeader";
+
 export default function CareersPage() {
   return (
-    <main className="min-h-screen bg-[#f7f7f7] text-[#333333]">
-      {/* NAV */}
-      <nav className="border-b border-gray-100 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <a href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ed1c2e] text-lg font-black text-white">
-              Rx
-            </div>
+    <>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-[#f7f7f7] text-[#333333]">
 
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-gray-400">
-                BELLEWOOD
-              </p>
-              <h1 className="text-xl font-black">PHARMACY</h1>
-            </div>
-          </a>
-
-          <a
-            href="/"
-            className="rounded-full border border-gray-200 px-5 py-3 text-sm font-bold transition hover:border-[#ed1c2e] hover:text-[#ed1c2e]"
-          >
-            Back Home
-          </a>
-        </div>
-      </nav>
-
-      {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
@@ -105,23 +84,27 @@ export default function CareersPage() {
               <input
                 type="text"
                 placeholder="Full name"
+                aria-label="Full name"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <input
                 type="email"
                 placeholder="Email address"
+                aria-label="Email address"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <input
                 type="tel"
                 placeholder="Phone number"
+                aria-label="Phone number"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
 
               <select
                 defaultValue=""
+                aria-label="Pharmacy technician experience"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               >
                 <option value="" disabled>
@@ -135,6 +118,7 @@ export default function CareersPage() {
 
               <select
                 defaultValue=""
+                aria-label="Certification status"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               >
                 <option value="" disabled>
@@ -147,6 +131,7 @@ export default function CareersPage() {
 
               <select
                 defaultValue=""
+                aria-label="Availability"
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               >
                 <option value="" disabled>
@@ -160,6 +145,7 @@ export default function CareersPage() {
 
               <textarea
                 placeholder="Tell us a little about yourself"
+                aria-label="Tell us a little about yourself"
                 rows={5}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#ed1c2e]"
               />
@@ -292,5 +278,6 @@ export default function CareersPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }
